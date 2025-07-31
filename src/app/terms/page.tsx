@@ -27,7 +27,7 @@ export default function TermsPage() {
               Welcome to AiKinkLab
             </h2>
             <p className="text-neutral-gray leading-relaxed">
-              These Terms of Service ("Terms") govern your use of the AiKinkLab website and services.
+              These Terms of Service (&quot;Terms&quot;) govern your use of the AiKinkLab website and services.
               By accessing or using our services, you agree to be bound by these Terms.
             </p>
           </div>
@@ -189,54 +189,54 @@ export default function TermsPage() {
               <div className="text-neutral-gray leading-relaxed space-y-4">
                 <h3 className="text-lg font-medium text-warm-off-white">9.1 Governing Law</h3>
                 <p>
-                  These Terms are governed by the laws of the People's Republic of China.
+                  These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which AiKinkLab operates, without regard to its conflict of law provisions.
                 </p>
                 
                 <h3 className="text-lg font-medium text-warm-off-white">9.2 Dispute Resolution</h3>
                 <p>
-                  Any disputes shall first be resolved through friendly negotiation. If negotiation fails, the dispute shall be submitted to a people's court with jurisdiction.
+                  Any disputes shall first be resolved through friendly negotiation. If negotiation fails, the dispute shall be submitted to a court of competent jurisdiction.
                 </p>
               </div>
             </section>
 
             <section className="bg-layered-charcoal border border-neutral-gray/20 rounded-card p-8">
               <h2 className="text-xl font-semibold text-warm-off-white mb-4">
-                10. 条款修改
+                10. Modification of Terms
               </h2>
               <div className="text-neutral-gray leading-relaxed space-y-4">
                 <p>
-                  我们保留随时修改这些条款的权利。重大变更将通过网站公告或其他适当方式通知用户。
-                  继续使用我们的服务即表示你接受修改后的条款。
+                  We reserve the right to modify these terms at any time. Significant changes will be notified to users via website announcements or other appropriate means.
+                  Your continued use of our services constitutes your acceptance of the modified terms.
                 </p>
               </div>
             </section>
 
             <section className="bg-layered-charcoal border border-neutral-gray/20 rounded-card p-8">
               <h2 className="text-xl font-semibold text-warm-off-white mb-4">
-                11. 联系信息
+                11. Contact Information
               </h2>
               <div className="text-neutral-gray leading-relaxed space-y-4">
-                <p>如果你对这些条款有任何疑问，请联系我们：</p>
+                <p>If you have any questions about these terms, please contact us:</p>
                 <ul className="list-none space-y-2">
-                  <li>邮箱：<a href="mailto:legal@aikinklab.com" className="text-neon-magenta hover:text-hover-magenta">legal@aikinklab.com</a></li>
-                  <li>地址：AiKinkLab 法务部门</li>
+                  <li>Email: <a href="mailto:legal@aikinklab.com" className="text-neon-magenta hover:text-hover-magenta">legal@aikinklab.com</a></li>
+                  <li>Address: AiKinkLab Legal Department</li>
                 </ul>
               </div>
             </section>
 
             <section className="bg-layered-charcoal border border-neutral-gray/20 rounded-card p-8">
               <h2 className="text-xl font-semibold text-warm-off-white mb-4">
-                12. 其他条款
+                12. Miscellaneous
               </h2>
               <div className="text-neutral-gray leading-relaxed space-y-4">
-                <h3 className="text-lg font-medium text-warm-off-white">12.1 可分割性</h3>
+                <h3 className="text-lg font-medium text-warm-off-white">12.1 Severability</h3>
                 <p>
-                  如果这些条款的任何部分被认定为无效或不可执行，其余部分仍然有效。
+                  If any part of these Terms is found to be invalid or unenforceable, the remaining portions will remain in full force and effect.
                 </p>
                 
-                <h3 className="text-lg font-medium text-warm-off-white">12.2 完整协议</h3>
+                <h3 className="text-lg font-medium text-warm-off-white">12.2 Entire Agreement</h3>
                 <p>
-                  这些条款构成你与AiKinkLab之间关于使用我们服务的完整协议。
+                  These Terms constitute the entire agreement between you and AiKinkLab concerning the use of our services.
                 </p>
               </div>
             </section>

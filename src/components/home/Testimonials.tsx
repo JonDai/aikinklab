@@ -60,7 +60,7 @@ export function Testimonials() {
               
               {/* Content */}
               <blockquote className="text-neutral-gray leading-relaxed mb-4">
-                "{testimonial.content}"
+                &quot;{testimonial.content}&quot;
               </blockquote>
               
               {/* Author and category */}

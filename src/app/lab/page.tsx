@@ -12,30 +12,30 @@ export const metadata: Metadata = {
 const featuredArticles = [
   {
     id: 1,
-    title: 'BDSM入门指南：安全、理智、知情同意的原则',
-    excerpt: '了解BDSM的基本原则和安全实践，为初学者提供全面的入门指导。',
-    category: '入门指南',
-    readTime: '8分钟',
+    title: 'Beginner\'s Guide to BDSM: Principles of Safety, Sanity, and Consent',
+    excerpt: 'Understand the fundamental principles and safe practices of BDSM with this comprehensive guide for beginners.',
+    category: 'Beginner Guides',
+    readTime: '8 min',
     publishDate: '2024-01-15',
     slug: 'bdsm-beginner-guide',
     featured: true,
   },
   {
     id: 2,
-    title: '探索支配与服从：理解权力交换的心理学',
-    excerpt: '深入分析支配与服从关系中的心理动机和情感需求。',
-    category: '心理学',
-    readTime: '12分钟',
+    title: 'Exploring Dominance & Submission: The Psychology of Power Exchange',
+    excerpt: 'A deep dive into the psychological motivations and emotional needs within Dominance and Submission dynamics.',
+    category: 'Psychology',
+    readTime: '12 min',
     publishDate: '2024-01-10',
     slug: 'dominance-submission-psychology',
     featured: true,
   },
   {
     id: 3,
-    title: '建立健康的Kink关系：沟通与界限设定',
-    excerpt: '学习如何在Kink关系中建立有效沟通和明确界限。',
-    category: '关系指导',
-    readTime: '10分钟',
+    title: 'Building Healthy Kink Relationships: Communication & Setting Boundaries',
+    excerpt: 'Learn how to establish effective communication and clear boundaries in kink relationships.',
+    category: 'Relationship Advice',
+    readTime: '10 min',
     publishDate: '2024-01-05',
     slug: 'healthy-kink-relationships',
     featured: false,
@@ -43,12 +43,12 @@ const featuredArticles = [
 ];
 
 const categories = [
-  '全部',
-  '入门指南',
-  '心理学',
-  '关系指导',
-  '安全实践',
-  '工具介绍',
+  'All',
+  'Beginner Guides',
+  'Psychology',
+  'Relationship Advice',
+  'Safety Practices',
+  'Tool Guides',
 ];
 
 export default function LabPage() {
@@ -58,10 +58,10 @@ export default function LabPage() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="font-playfair text-h1 text-warm-off-white mb-4">
-            实验室
+            The Lab
           </h1>
           <p className="text-xl text-neutral-gray max-w-3xl mx-auto leading-relaxed">
-            探索Kink教育和BDSM知识的宝库。我们的专家团队为你提供科学、专业、实用的内容，帮助你在这个领域中安全地学习和成长。
+            Explore a treasure trove of kink education and BDSM knowledge. Our team of experts provides scientific, professional, and practical content to help you learn and grow safely in this space.
           </p>
         </div>
 
@@ -71,7 +71,7 @@ export default function LabPage() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-gray" />
             <input
               type="text"
-              placeholder="搜索文章..."
+              placeholder="Search articles..."
               className="w-full bg-layered-charcoal border border-neutral-gray/20 rounded-card pl-10 pr-4 py-3 text-warm-off-white placeholder-neutral-gray focus:border-neon-magenta focus:outline-none transition-colors duration-200"
             />
           </div>
@@ -90,7 +90,7 @@ export default function LabPage() {
         {/* Featured Articles */}
         <div className="mb-16">
           <h2 className="text-2xl font-semibold text-warm-off-white mb-8">
-            精选文章
+            Featured Articles
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {featuredArticles.filter(article => article.featured).map((article, index) => (
@@ -111,7 +111,7 @@ export default function LabPage() {
                       </div>
                       <div className="flex items-center space-x-1">
                         <Calendar className="w-4 h-4" />
-                        <span>{new Date(article.publishDate).toLocaleDateString('zh-CN')}</span>
+                        <span>{new Date(article.publishDate).toLocaleDateString('en-US')}</span>
                       </div>
                     </div>
                   </div>
@@ -128,7 +128,7 @@ export default function LabPage() {
                     href={`/lab/${article.slug}`}
                     className="inline-flex items-center text-neon-magenta hover:text-hover-magenta transition-colors duration-200 font-medium"
                   >
-                    阅读全文
+                    Read Full Article
                     <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-200" />
                   </Link>
                 </div>
@@ -140,7 +140,7 @@ export default function LabPage() {
         {/* All Articles */}
         <div>
           <h2 className="text-2xl font-semibold text-warm-off-white mb-8">
-            所有文章
+            All Articles
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredArticles.map((article, index) => (
@@ -168,13 +168,13 @@ export default function LabPage() {
                 
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-neutral-gray">
-                    {new Date(article.publishDate).toLocaleDateString('zh-CN')}
+                    {new Date(article.publishDate).toLocaleDateString('en-US')}
                   </span>
                   <Link
                     href={`/lab/${article.slug}`}
                     className="text-neon-magenta hover:text-hover-magenta transition-colors duration-200 text-sm font-medium"
                   >
-                    阅读 →
+                    Read →
                   </Link>
                 </div>
               </article>
@@ -185,7 +185,7 @@ export default function LabPage() {
         {/* Load More */}
         <div className="text-center mt-12">
           <button className="btn-secondary">
-            加载更多文章
+            Load More Articles
           </button>
         </div>
       </div>

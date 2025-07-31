@@ -9,8 +9,8 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' });
 
 export const metadata: Metadata = {
-  title: 'AiKinkLab - The AI-Powered Kink & Personality Test',
-  description: 'Unlock the secrets of your desires. Our AI-driven test offers a private, insightful journey into your personality and kinks. Discover your true self today.',
+  title: 'AI Kink Test: Discover Your Inner Profile | AIKinkLab',
+  description: 'Discover your inner profile with our free, AI-powered kink test. Take our test at AIKinkLab for a private and enlightening analysis. Start Your Journey Now.',
   keywords: 'kink test, bdsm test, personality analysis, AI sexuality test, discover kinks, relationship dynamics',
   openGraph: {
     title: 'AiKinkLab - Uncover Your Authentic Self with AI',

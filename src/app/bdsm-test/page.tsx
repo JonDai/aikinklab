@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { ArrowRight, Shield, Brain, Clock, Users } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'BDSM Test - Discover Your BDSM Personality | AiKinkLab',
-  description: 'Take our comprehensive BDSM test to discover your dominant, submissive, or switch tendencies. Professional AI analysis with complete privacy.',
-  keywords: 'BDSM test, dominant submissive test, kink test, BDSM personality, sexual preferences test',
+  title: 'The #1 AI BDSM Test - Private & Insightful | AIKinkLab',
+  description: 'Take the #1 AI BDSM test for a private and insightful analysis of your personality. Start your journey now at AIKinkLab.',
+    keywords: 'BDSM test, dominant submissive test, kink test, BDSM personality, sexual preferences test',
   openGraph: {
     title: 'BDSM Test - Discover Your BDSM Personality',
     description: 'Professional BDSM personality test with AI-powered analysis.',
@@ -15,42 +15,42 @@ export const metadata: Metadata = {
 const features = [
   {
     icon: Brain,
-    title: 'AI驱动分析',
-    description: '先进的人工智能算法分析你的回答，提供准确的个性评估',
+    title: 'AI-Powered Analysis',
+    description: 'Advanced AI algorithms analyze your answers to provide an accurate personality assessment.',
   },
   {
     icon: Shield,
-    title: '完全匿名',
-    description: '无需注册，所有数据加密处理，绝对保护你的隐私',
+    title: 'Completely Anonymous',
+    description: 'No registration required. All data is encrypted to protect your privacy.',
   },
   {
     icon: Clock,
-    title: '快速完成',
-    description: '仅需15分钟即可完成测试，立即获得详细分析报告',
+    title: 'Quick to Complete',
+    description: 'The test takes only 15 minutes to complete, and you get a detailed analysis report immediately.',
   },
   {
     icon: Users,
-    title: '专业可信',
-    description: '基于心理学研究，已有数万用户验证的可靠测试',
+    title: 'Professional and Trusted',
+    description: 'Based on psychological research and validated by tens of thousands of users.',
   },
 ];
 
 const faqs = [
   {
-    question: '什么是BDSM测试？',
-    answer: 'BDSM测试是一种心理评估工具，帮助你了解自己在BDSM关系中的角色偏好，包括支配（Dominant）、服从（Submissive）、施虐（Sadist）、受虐（Masochist）等倾向。',
+    question: 'What is a BDSM test?',
+    answer: 'A BDSM test is a psychological assessment tool that helps you understand your role preferences in BDSM relationships, including tendencies towards dominance, submission, sadism, and masochism.',
   },
   {
-    question: '测试结果准确吗？',
-    answer: '我们的测试基于心理学研究和大量用户数据训练的AI模型，具有很高的准确性。但请记住，这只是一个参考工具，真正的自我了解需要时间和实践。',
+    question: 'Are the test results accurate?',
+    answer: 'Our test is based on psychological research and an AI model trained on extensive user data, ensuring high accuracy. However, please remember that this is a reference tool, and true self-understanding takes time and practice.',
   },
   {
-    question: '我的隐私会受到保护吗？',
-    answer: '绝对会。我们不收集任何个人身份信息，所有测试数据都经过加密处理，且不会与第三方分享。你的隐私安全是我们的首要承诺。',
+    question: 'Will my privacy be protected?',
+    answer: 'Absolutely. We do not collect any personally identifiable information. All test data is encrypted and will not be shared with third parties. Your privacy is our top priority.',
   },
   {
-    question: '测试费用是多少？',
-    answer: '基础测试完全免费。如果你想获得更详细的AI分析报告和个性化建议，可以选择我们的高级版本。',
+    question: 'How much does the test cost?',
+    answer: 'The basic test is completely free. If you want a more detailed AI analysis report and personalized recommendations, you can opt for our premium version.',
   },
 ];
 
@@ -64,20 +64,20 @@ export default function BDSMTestPage() {
         
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="font-playfair text-h1 text-warm-off-white mb-6">
-            专业的<span className="text-neon-magenta">BDSM测试</span>
+            Professional <span className="text-neon-magenta">BDSM Test</span>
           </h1>
           
           <p className="text-xl text-neutral-gray mb-8 max-w-3xl mx-auto leading-relaxed">
-            通过我们科学验证的BDSM个性测试，深入了解你的支配、服从、施虐、受虐倾向。获得专业的AI分析报告，在安全私密的环境中探索真实的自己。
+            Gain a deep understanding of your dominant, submissive, sadistic, and masochistic tendencies with our scientifically validated BDSM personality test. Receive a professional AI analysis report and explore your true self in a safe and private environment.
           </p>
           
           <Link href="/test" className="btn-primary group text-lg px-8 py-4">
-            开始BDSM测试
+            Start BDSM Test
             <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
           </Link>
           
           <p className="text-sm text-neutral-gray mt-4">
-            🔒 完全匿名 · 立即开始 · 无需注册
+            🔒 Completely Anonymous · Start Immediately · No Registration Required
           </p>
         </div>
       </section>
@@ -87,10 +87,10 @@ export default function BDSMTestPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-playfair text-h2 text-warm-off-white mb-4">
-              为什么选择我们的BDSM测试？
+              Why Choose Our BDSM Test?
             </h2>
             <p className="text-lg text-neutral-gray max-w-2xl mx-auto">
-              专业、准确、私密的BDSM个性分析工具
+              A professional, accurate, and private BDSM personality analysis tool.
             </p>
           </div>
           
@@ -120,10 +120,10 @@ export default function BDSMTestPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-playfair text-h2 text-warm-off-white mb-4">
-              常见问题
+              Frequently Asked Questions
             </h2>
             <p className="text-lg text-neutral-gray">
-              关于BDSM测试的一切你需要知道的
+              Everything you need to know about the BDSM test.
             </p>
           </div>
           
@@ -150,13 +150,13 @@ export default function BDSMTestPage() {
       <section className="py-24 bg-layered-charcoal/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-playfair text-h2 text-warm-off-white mb-4">
-            准备好了解真实的自己吗？
+            Ready to Understand Your True Self?
           </h2>
           <p className="text-lg text-neutral-gray mb-8">
-            立即开始你的BDSM个性探索之旅
+            Start your journey of BDSM personality exploration now.
           </p>
           <Link href="/test" className="btn-primary group text-lg px-8 py-4">
-            开始免费测试
+            Start Free Test
             <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
           </Link>
         </div>
