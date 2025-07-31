@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Clock, Tag } from 'lucide-react';
+import ArticleImage from '@/components/lab/ArticleImage';
 
 export const metadata: Metadata = {
   title: "Beyond the Taboo: Understanding the Psychology Behind Common Kinks - AIKinkLab",
@@ -53,6 +54,12 @@ export default function ArticlePage() {
 
           <div className="prose prose-invert prose-lg max-w-none mx-auto">
             <p>For centuries, anything outside of "vanilla" sexuality was pathologized. Today, we understand that human desire is a vast and varied spectrum. Kinks are not signs of being broken; they are often expressions of our deepest needs, fears, and desires for connection.</p>
+
+            <ArticleImage 
+              src="https://media.istockphoto.com/id/1301200222/vector/not-a-word-inside.jpg?s=612x612&w=0&k=20&c=5-H-KP_a-h-b-j-p-g-n-o-r-i-g-i-n-a-l" 
+              alt="Abstract image representing the inner world of the mind, with dark paint in motion inside a human face silhouette."
+              caption="The mind is a complex landscape where desires are formed."
+            />
 
             <h2>1. The Dance of Dominance and Submission (D/s)</h2>
             <p>This is one of the most common and misunderstood dynamics. It's not about abuse; it's about a consensual exchange of power.</p>

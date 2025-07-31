@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Clock, Tag } from 'lucide-react';
+import ArticleImage from '@/components/lab/ArticleImage';
 
 export const metadata: Metadata = {
   title: "The Conversation Guide: How to Talk About Kinks with Your Partner - AIKinkLab",
@@ -52,7 +53,13 @@ export default function ArticlePage() {
           </header>
 
           <div className="prose prose-invert prose-lg max-w-none mx-auto">
-            <p>The most common fear is rejection or judgment. But framing the conversation correctly can transform it from a confession into an invitation—an invitation to deeper intimacy and shared exploration. The goal isn't to 'convince' your partner, but to share a part of yourself and see what's possible together.</p>
+            <p>The most common fear is rejection or judgment. But framing the conversation correctly can transform it from a confession into an invitation—an invitation to deeper intimacy and shared exploration. The goal isn&apos;t to &apos;convince&apos; your partner, but to share a part of yourself and see what&apos;s possible together.</p>
+
+            <ArticleImage 
+              src="https://deepdreamgenerator.com/storage/fast_queue/temp_images/1a711734f509373a914615477583e8a615e1cf4a.jpg" 
+              alt="Abstract image representing two people connecting, with vibrant colors and textures."
+              caption="Communication is a bridge to deeper understanding and intimacy."
+            />
 
             <h2>1. Set the Stage for Success</h2>
             <p>Timing and environment are everything. Don't bring it up during a fight, or right after sex, or when one of you is rushing out the door.</p>

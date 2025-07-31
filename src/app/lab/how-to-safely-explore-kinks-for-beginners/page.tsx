@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Clock, Eye, Tag } from 'lucide-react';
+import ArticleImage from '@/components/lab/ArticleImage';
 
 export const metadata: Metadata = {
   title: "A Beginner's Compass: How to Safely Explore Your Kinks - AIKinkLab",
@@ -52,14 +53,20 @@ export default function ArticlePage() {
           </header>
 
           <div className="prose prose-invert prose-lg max-w-none mx-auto">
-            <p>Stepping into the world of kink can feel like discovering a new continent within yourself. It's exciting, a little mysterious, and full of potential for profound self-understanding and deeper connection with others. But like any exploration, it's best undertaken with a map and a compass. This guide is exactly that.</p>
+            <p>Stepping into the world of kink can feel like discovering a new continent within yourself. It&apos;s exciting, a little mysterious, and full of potential for profound self-understanding and deeper connection with others. But like any exploration, it&apos;s best undertaken with a map and a compass. This guide is exactly that.</p>
+
+            <ArticleImage 
+              src="https://img.freepik.com/premium-photo/magenta-teal-abstract-organic-shape-futuristic-background-neon-3d-render_93231706.htm" 
+              alt="Abstract image of a futuristic compass with neon colors, representing guidance in exploring kinks."
+              caption="A conceptual compass to guide your personal journey."
+            />
 
             <h2>1. The Golden Rule: Safety, Sanity, and Consent (SSC)</h2>
             <p>Before you take another step, memorize this acronym: SSC. It's the bedrock of all healthy kink dynamics.</p>
             <ul>
               <li><strong>Safety:</strong> This refers to physical and emotional well-being. It means using safe words, understanding the risks of any activity, and ensuring you have the right equipment (if any).</li>
-              <li><strong>Sanity:</strong> This is about respecting mental and emotional boundaries. Kink can be intense, and it's crucial that all participants feel psychologically secure and respected throughout.</li>
-              <li><strong>Consent:</strong> Consent must be enthusiastic, ongoing, and freely given. It can be withdrawn at any time, for any reason. The absence of a 'no' is not a 'yes'.</li>
+              <li><strong>Sanity:</strong> This is about respecting mental and emotional boundaries. Kink can be intense, and it&apos;s crucial that all participants feel psychologically secure and respected throughout.</li>
+              <li><strong>Consent:</strong> Consent must be enthusiastic, ongoing, and freely given. It can be withdrawn at any time, for any reason. The absence of a &apos;no&apos; is not a &apos;yes&apos;.</li>
             </ul>
 
             <h2>2. Know Thyself: The Joy of Self-Exploration</h2>
