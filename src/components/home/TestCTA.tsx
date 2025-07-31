@@ -64,7 +64,7 @@ export function TestCTA() {
           </div>
           
           {/* CTA Button */}
-          <Link href="/test" className="btn-primary group text-lg px-8 py-4">
+          <Link href="/test" className="btn-primary group inline-flex items-center justify-center whitespace-nowrap text-lg">
             Start Your Kink Test
             <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
           </Link>

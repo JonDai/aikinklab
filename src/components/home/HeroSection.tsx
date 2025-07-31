@@ -33,11 +33,11 @@ export function HeroSection() {
         
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center fade-in" style={{ animationDelay: '600ms' }}>
-          <Link href="/test" className="btn-primary group">
+          <Link href="/test" className="btn-primary group inline-flex items-center justify-center whitespace-nowrap">
             Start Your Journey
             <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
           </Link>
-          <Link href="/about" className="btn-secondary">
+          <Link href="/about" className="btn-secondary inline-flex items-center justify-center whitespace-nowrap">
             Learn About Our Method
           </Link>
         </div>
