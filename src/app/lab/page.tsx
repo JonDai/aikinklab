@@ -3,41 +3,41 @@ import Link from 'next/link';
 import { Calendar, Clock, ArrowRight, Search, Filter } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'The Lab - Kink Education & BDSM Knowledge | AiKinkLab',
-  description: 'Explore our comprehensive collection of articles on kink education, BDSM knowledge, and sexual wellness. Expert insights and educational content.',
-  keywords: 'kink education, BDSM knowledge, sexual wellness, kink articles, BDSM guide',
+  title: 'The Lab - Kink Education & BDSM Knowledge | AIKinkLab',
+  description: 'Explore our comprehensive collection of articles on kink education, BDSM knowledge, and sexual wellness. Expert insights and educational content from AIKinkLab.',
+  keywords: 'kink education, BDSM knowledge, sexual wellness, kink articles, BDSM guide, how to safely explore kinks, psychology behind kinks, talk about kinks with partner',
 };
 
 // Mock data for articles - in a real app, this would come from a CMS or API
-const featuredArticles = [
+const articles = [
   {
     id: 1,
-    title: 'Beginner\'s Guide to BDSM: Principles of Safety, Sanity, and Consent',
-    excerpt: 'Understand the fundamental principles and safe practices of BDSM with this comprehensive guide for beginners.',
+    title: "A Beginner's Compass: How to Safely Explore Your Kinks",
+    excerpt: 'A step-by-step guide for anyone new to the world of kink. We cover safety, communication, and the joy of self-discovery in a pressure-free way.',
     category: 'Beginner Guides',
-    readTime: '8 min',
-    publishDate: '2024-01-15',
-    slug: 'bdsm-beginner-guide',
+    readTime: '9 min',
+    publishDate: '2024-07-22',
+    slug: 'how-to-safely-explore-kinks-for-beginners',
     featured: true,
   },
   {
     id: 2,
-    title: 'Exploring Dominance & Submission: The Psychology of Power Exchange',
-    excerpt: 'A deep dive into the psychological motivations and emotional needs within Dominance and Submission dynamics.',
+    title: 'Beyond the Taboo: Understanding the Psychology Behind Common Kinks',
+    excerpt: 'Delve into the psychological drivers behind common kinks. This article demystifies desires and provides a scientific, rational perspective.',
     category: 'Psychology',
-    readTime: '12 min',
-    publishDate: '2024-01-10',
-    slug: 'dominance-submission-psychology',
+    readTime: '14 min',
+    publishDate: '2024-07-18',
+    slug: 'psychology-behind-common-kinks',
     featured: true,
   },
   {
     id: 3,
-    title: 'Building Healthy Kink Relationships: Communication & Setting Boundaries',
-    excerpt: 'Learn how to establish effective communication and clear boundaries in kink relationships.',
+    title: 'The Conversation Guide: How to Talk About Kinks with Your Partner',
+    excerpt: 'Practical communication techniques and steps to help you and your partner build trust and explore desires together openly and honestly.',
     category: 'Relationship Advice',
-    readTime: '10 min',
-    publishDate: '2024-01-05',
-    slug: 'healthy-kink-relationships',
+    readTime: '11 min',
+    publishDate: '2024-07-15',
+    slug: 'how-to-talk-about-kinks-with-your-partner',
     featured: false,
   },
 ];
@@ -93,7 +93,7 @@ export default function LabPage() {
             Featured Articles
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {featuredArticles.filter(article => article.featured).map((article, index) => (
+            {articles.filter(article => article.featured).map((article, index) => (
               <article
                 key={article.id}
                 className="bg-layered-charcoal border border-neutral-gray/20 rounded-card overflow-hidden hover:border-neon-magenta/50 transition-all duration-300 group fade-in"
@@ -143,7 +143,7 @@ export default function LabPage() {
             All Articles
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredArticles.map((article, index) => (
+            {articles.map((article, index) => (
               <article
                 key={article.id}
                 className="bg-layered-charcoal border border-neutral-gray/20 rounded-card p-6 hover:border-neon-magenta/50 transition-all duration-300 group fade-in"
