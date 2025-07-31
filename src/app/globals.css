@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-neutral-gray/20;
+  }
+  body {
+    @apply bg-warm-charcoal text-warm-off-white font-inter;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.02"/></svg>');
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-neon-magenta text-warm-off-white px-6 py-3 rounded-pill font-medium transition-all duration-200 ease-out hover:bg-hover-magenta hover:shadow-glow;
+  }
+  
+  .btn-secondary {
+    @apply bg-transparent text-neutral-gray border border-neutral-gray px-6 py-3 rounded-pill font-medium transition-all duration-200 ease-out hover:text-warm-off-white hover:border-warm-off-white;
+  }
+  
+  .quiz-option {
+    @apply bg-layered-charcoal border border-layered-charcoal rounded-card p-4 transition-all duration-200 ease-out hover:border-neutral-gray hover:-translate-y-1 cursor-pointer;
+  }
+  
+  .quiz-option.selected {
+    @apply border-neon-magenta shadow-glow-inset;
+  }
+  
+  .fade-in {
+    @apply opacity-0 animate-[fadeIn_500ms_ease-out_forwards];
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
