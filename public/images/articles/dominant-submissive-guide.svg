@@ -1,0 +1,38 @@
+<svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="dominantGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D946EF;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#E879F9;stop-opacity:0.6" />
+    </linearGradient>
+    <linearGradient id="submissiveGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C0A062;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#D946EF;stop-opacity:0.5" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="400" fill="#1A1A1A"/>
+  
+  <!-- Abstract flowing shapes representing power dynamics -->
+  <path d="M0,200 Q200,100 400,200 T800,200" stroke="url(#dominantGradient)" stroke-width="40" fill="none" opacity="0.7" filter="url(#glow)"/>
+  
+  <path d="M0,250 Q300,150 600,250 T800,250" stroke="url(#submissiveGradient)" stroke-width="30" fill="none" opacity="0.6"/>
+  
+  <!-- Interweaving curves -->
+  <path d="M100,300 Q400,100 700,300" stroke="#D946EF" stroke-width="20" fill="none" opacity="0.4"/>
+  
+  <path d="M100,100 Q400,300 700,100" stroke="#C0A062" stroke-width="15" fill="none" opacity="0.3"/>
+  
+  <!-- Central focal point -->
+  <circle cx="400" cy="200" r="30" fill="url(#dominantGradient)" opacity="0.8" filter="url(#glow)"/>
+  
+  <!-- Subtle texture overlay -->
+  <rect width="800" height="400" fill="url(data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23F5F5F5' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E)" opacity="0.5"/>
+</svg>

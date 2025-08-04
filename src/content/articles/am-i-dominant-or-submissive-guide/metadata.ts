@@ -9,8 +9,8 @@ export const metadata = {
   tags: ['Self-Discovery', 'BDSM Basics', 'Personality'],
   readTime: '8 min read',
   image: {
-    src: '/images/articles/dominant-submissive-guide.webp',
-    alt: 'Abstract representation of dominant and submissive dynamics with flowing magenta and teal shapes',
+    src: '/images/articles/dominant-submissive-guide.svg',
+    alt: 'Abstract representation of dominant and submissive dynamics with flowing magenta and gold shapes',
     caption: 'Understanding the spectrum of power dynamics in BDSM relationships'
   }
 };
