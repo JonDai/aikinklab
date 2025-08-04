@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Calendar, Clock, ArrowRight, Search, Filter } from 'lucide-react';
+import { getAllArticlesMetadata } from '@/content/lab';
 
 export const metadata: Metadata = {
   title: 'The Lab - Kink Education & BDSM Knowledge | AIKinkLab',
@@ -8,50 +9,19 @@ export const metadata: Metadata = {
   keywords: 'kink education, BDSM knowledge, sexual wellness, kink articles, BDSM guide, how to safely explore kinks, psychology behind kinks, talk about kinks with partner',
 };
 
-// Mock data for articles - in a real app, this would come from a CMS or API
-const articles = [
-  {
-    id: 1,
-    title: "A Beginner's Compass: How to Safely Explore Your Kinks",
-    excerpt: 'A step-by-step guide for anyone new to the world of kink. We cover safety, communication, and the joy of self-discovery in a pressure-free way.',
-    category: 'Beginner Guides',
-    readTime: '9 min',
-    publishDate: '2024-07-22',
-    slug: 'how-to-safely-explore-kinks-for-beginners',
-    featured: true,
-  },
-  {
-    id: 2,
-    title: 'Beyond the Taboo: Understanding the Psychology Behind Common Kinks',
-    excerpt: 'Delve into the psychological drivers behind common kinks. This article demystifies desires and provides a scientific, rational perspective.',
-    category: 'Psychology',
-    readTime: '14 min',
-    publishDate: '2024-07-18',
-    slug: 'psychology-behind-common-kinks',
-    featured: true,
-  },
-  {
-    id: 3,
-    title: 'The Conversation Guide: How to Talk About Kinks with Your Partner',
-    excerpt: 'Practical communication techniques and steps to help you and your partner build trust and explore desires together openly and honestly.',
-    category: 'Relationship Advice',
-    readTime: '11 min',
-    publishDate: '2024-07-15',
-    slug: 'how-to-talk-about-kinks-with-your-partner',
-    featured: false,
-  },
-];
+
 
 const categories = [
   'All',
   'Beginner Guides',
-  'Psychology',
-  'Relationship Advice',
+  'Deep Dives',
+  'Communication',
   'Safety Practices',
   'Tool Guides',
 ];
 
-export default function LabPage() {
+export default async function LabPage() {
+  const articles = await getAllArticlesMetadata();
   return (
     <div className="min-h-screen py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -95,14 +65,14 @@ export default function LabPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {articles.filter(article => article.featured).map((article, index) => (
               <article
-                key={article.id}
+                key={article.slug}
                 className="bg-layered-charcoal border border-neutral-gray/20 rounded-card overflow-hidden hover:border-neon-magenta/50 transition-all duration-300 group fade-in"
                 style={{ animationDelay: `${index * 200}ms` }}
               >
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-xs text-neon-magenta bg-neon-magenta/10 px-2 py-1 rounded-pill">
-                      {article.category}
+                      {article.tags[0]}
                     </span>
                     <div className="flex items-center space-x-4 text-sm text-neutral-gray">
                       <div className="flex items-center space-x-1">
@@ -111,7 +81,7 @@ export default function LabPage() {
                       </div>
                       <div className="flex items-center space-x-1">
                         <Calendar className="w-4 h-4" />
-                        <span>{new Date(article.publishDate).toLocaleDateString('en-US')}</span>
+                        <span>{new Date(article.publishedTime).toLocaleDateString('en-US')}</span>
                       </div>
                     </div>
                   </div>
@@ -121,7 +91,7 @@ export default function LabPage() {
                   </h3>
                   
                   <p className="text-neutral-gray leading-relaxed mb-4">
-                    {article.excerpt}
+                    {article.description}
                   </p>
                   
                   <Link
@@ -145,13 +115,13 @@ export default function LabPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {articles.map((article, index) => (
               <article
-                key={article.id}
+                key={article.slug}
                 className="bg-layered-charcoal border border-neutral-gray/20 rounded-card p-6 hover:border-neon-magenta/50 transition-all duration-300 group fade-in"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs text-neon-magenta bg-neon-magenta/10 px-2 py-1 rounded-pill">
-                    {article.category}
+                    {article.tags[0]}
                   </span>
                   <span className="text-xs text-neutral-gray">
                     {article.readTime}
@@ -163,12 +133,12 @@ export default function LabPage() {
                 </h3>
                 
                 <p className="text-neutral-gray text-sm leading-relaxed mb-4">
-                  {article.excerpt}
+                  {article.description}
                 </p>
                 
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-neutral-gray">
-                    {new Date(article.publishDate).toLocaleDateString('en-US')}
+                    {new Date(article.publishedTime).toLocaleDateString('en-US')}
                   </span>
                   <Link
                     href={`/lab/${article.slug}`}
