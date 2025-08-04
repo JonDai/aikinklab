@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://aikinklab.com/sitemap.xml
+
+# Disallow crawling of dynamic result pages to avoid indexing temporary content
+Disallow: /results/
+
+# Allow crawling of all other pages
+Allow: /test
+Allow: /bdsm-test
+Allow: /lab
+Allow: /lab/*
+Allow: /about
+Allow: /contact
+Allow: /privacy-policy
+Allow: /terms
