@@ -4,7 +4,7 @@ export const metadata = {
   title: 'Beyond the Taboo: Understanding the Psychology Behind Common Kinks',
   description: 'Explore the psychological drivers behind common kinks like BDSM, dominance, and submission. Understand the science of desire and what makes us tick.',
   keywords: 'kink psychology, psychology of BDSM, dominance and submission, understanding kinks, sexual psychology',
-  publishedTime: '2024-07-20T12:00:00Z',
+  publishedTime: '2025-08-04T12:00:00Z',
   author: 'AIKinkLab Team',
   tags: ['Deep Dives'],
   readTime: '12 min read',
