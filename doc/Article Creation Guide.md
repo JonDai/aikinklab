@@ -19,7 +19,7 @@ export const metadata = {
   title: 'Article Title', // SEO优化的标题
   description: 'Article description for SEO', // 150-160字符的描述
   keywords: 'keyword1, keyword2, keyword3', // SEO关键词
-  publishedTime: '2024-12-30T10:00:00Z', // ISO格式时间
+  publishedTime: '2025-08-04T10:00:00Z', // ISO格式时间，使用当前日期
   author: 'AIKinkLab Team',
   tags: ['Tag1', 'Tag2'], // 文章标签
   readTime: 'X min read', // 预估阅读时间
@@ -187,5 +187,23 @@ npm run dev
 4. 没有控制台错误
 5. 响应式设计在不同设备上正常工作
 6. SEO元数据正确设置
+
+## 日期规范
+
+### 发布日期要求
+- **所有新文章的 `publishedTime` 必须使用当前日期**
+- 格式：ISO 8601 标准格式 `YYYY-MM-DDTHH:mm:ssZ`
+- 示例：`2025-08-04T10:00:00Z`（2025年8月4日上午10点UTC时间）
+
+### 更新现有文章日期
+如果需要更新现有文章的发布日期：
+1. 修改对应文章的 `metadata.ts` 文件中的 `publishedTime` 字段
+2. 使用当前日期替换旧的日期
+3. 提交更改到git仓库
+
+### 注意事项
+- 不要使用2024年或更早的日期
+- 保持时间格式的一致性
+- 更新日期后需要重新构建项目以确保更改生效
 
 遵循这个指南可以确保新文章的创建过程顺利，避免常见的技术问题。
