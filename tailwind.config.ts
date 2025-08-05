@@ -48,16 +48,18 @@ const config: Config = {
         'card': '12px',
         'pill': '9999px',
       },
+      boxShadow: {
+        'glow': '0 0 20px 5px rgba(217, 70, 239, 0.6)',
+        'glow-inset': 'inset 0 0 15px 2px rgba(217, 70, 239, 0.5)',
+      },
       transitionDuration: {
         '200': '200ms',
+        '300': '300ms',
         '500': '500ms',
       },
       transitionTimingFunction: {
         'ease-out': 'cubic-bezier(0, 0, 0.2, 1)',
-      },
-      boxShadow: {
-        'glow': '0 0 20px rgba(217, 70, 239, 0.3)',
-        'glow-inset': 'inset 0 0 10px rgba(217, 70, 239, 0.2)',
+        'ease-in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
       },
     },
   },
