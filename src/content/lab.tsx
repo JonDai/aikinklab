@@ -37,6 +37,7 @@ export interface ArticleMetadata {
 
 // 文章列表配置 - 只包含slug，用于动态加载
 export const articleSlugs = [
+  'what-is-my-kink-test',
   'how-to-safely-explore-kinks-for-beginners',
   'psychology-behind-common-kinks',
   'how-to-talk-about-kinks-with-your-partner',
