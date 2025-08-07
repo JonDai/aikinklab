@@ -7,31 +7,124 @@
   * {
     @apply border-neutral-gray/20;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-warm-charcoal text-warm-off-white font-inter;
     background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.02"/></svg>');
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    body {
+      font-size: 16px;
+      line-height: 1.6;
+    }
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-neon-magenta text-warm-off-white px-6 py-3 rounded-pill font-medium transition-all duration-200 ease-out hover:bg-hover-magenta hover:shadow-glow;
+    @apply bg-neon-magenta text-warm-off-white px-6 py-3 rounded-pill font-medium transition-all duration-200 ease-out hover:bg-hover-magenta hover:shadow-glow active:scale-95;
+    min-height: 48px;
+    /* Better touch targets on mobile */
   }
-  
+
   .btn-secondary {
-    @apply bg-transparent text-neutral-gray border border-neutral-gray px-6 py-3 rounded-pill font-medium transition-all duration-200 ease-out hover:text-warm-off-white hover:border-warm-off-white;
+    @apply bg-transparent text-neutral-gray border border-neutral-gray px-6 py-3 rounded-pill font-medium transition-all duration-200 ease-out hover:text-warm-off-white hover:border-warm-off-white active:scale-95;
+    min-height: 48px;
   }
-  
+
   .quiz-option {
-    @apply bg-layered-charcoal border border-layered-charcoal rounded-card p-4 transition-all duration-200 ease-out hover:border-neutral-gray hover:-translate-y-1 cursor-pointer;
+    @apply bg-layered-charcoal border border-layered-charcoal rounded-card p-4 transition-all duration-200 ease-out hover:border-neutral-gray cursor-pointer;
+    min-height: 60px;
+    /* Better touch targets */
   }
-  
+
+  .quiz-option:hover {
+    @apply -translate-y-1;
+  }
+
   .quiz-option.selected {
     @apply border-neon-magenta shadow-glow-inset;
   }
-  
+
+  /* Mobile-specific quiz option styling */
+  @media (max-width: 768px) {
+    .quiz-option {
+      @apply p-5;
+      min-height: 70px;
+    }
+
+    .quiz-option:hover {
+      @apply translate-y-0;
+      /* Disable hover effects on mobile */
+    }
+
+    .quiz-option:active {
+      @apply scale-95 bg-layered-charcoal/80;
+    }
+  }
+
   .fade-in {
     @apply opacity-0 animate-[fadeIn_500ms_ease-out_forwards];
+  }
+
+  .slide-up {
+    @apply opacity-0 animate-[slideUp_600ms_ease-out_forwards];
+  }
+
+  .scale-in {
+    @apply opacity-0 animate-[scaleIn_400ms_ease-out_forwards];
+  }
+
+  /* Mobile-friendly containers */
+  .mobile-container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  .mobile-text {
+    @apply text-base sm:text-lg;
+  }
+
+  .mobile-heading {
+    @apply text-2xl sm:text-3xl lg:text-4xl;
+  }
+
+  /* Touch-friendly interactive elements */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Improved focus states for accessibility */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-neon-magenta focus:ring-offset-2 focus:ring-offset-warm-charcoal;
+  }
+
+  /* Gradient text effect */
+  .gradient-text {
+    @apply bg-gradient-to-r from-neon-magenta to-matte-gold bg-clip-text text-transparent;
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-layered-charcoal/30 backdrop-blur-sm border border-neutral-gray/20;
+  }
+
+  /* Floating animation */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .float-delayed {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: -2s;
   }
 }
 
@@ -40,8 +133,107 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px 5px rgba(217, 70, 239, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 30px 10px rgba(217, 70, 239, 0.6);
+  }
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  .mobile-hero-spacing {
+    @apply py-16;
+  }
+
+  .mobile-section-spacing {
+    @apply py-12;
+  }
+
+  .mobile-card-spacing {
+    @apply p-4;
+  }
+
+  /* Improve readability on mobile */
+  .mobile-text-optimize {
+    font-size: 16px;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+  }
+
+  /* Better button spacing on mobile */
+  .mobile-button-stack {
+    @apply flex flex-col space-y-3 w-full;
+  }
+
+  .mobile-button-stack>* {
+    @apply w-full justify-center;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  body {
+    color-scheme: dark;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

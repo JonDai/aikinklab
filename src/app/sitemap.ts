@@ -5,7 +5,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://aikinklab.com'
   const currentDate = new Date().toISOString()
 
-  // 静态页面
+  // Static pages
   const staticPages = [
     {
       url: baseUrl,
@@ -57,7 +57,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]
 
-  // 动态文章页面
+  // Dynamic article pages
   const articlePages = articleSlugs.map((slug) => ({
     url: `${baseUrl}/lab/${slug}`,
     lastModified: currentDate,

@@ -48,7 +48,7 @@ export default function ResultsPage({ params }: { params: { id: string } }) {
         alert('Link copied to clipboard!');
       }
     } catch (error) {
-      console.error('分享失败:', error);
+      console.error('Share failed:', error);
     } finally {
       setIsSharing(false);
     }

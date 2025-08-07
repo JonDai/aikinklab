@@ -35,7 +35,7 @@ export interface ArticleMetadata {
   };
 }
 
-// 文章列表配置 - 只包含slug，用于动态加载
+// Article list configuration - contains only slugs for dynamic loading
 export const articleSlugs = [
   'what-is-my-kink-test',
   'how-to-safely-explore-kinks-for-beginners',
@@ -44,7 +44,7 @@ export const articleSlugs = [
   'am-i-dominant-or-submissive-guide',
 ];
 
-// 动态加载文章元数据
+// Dynamically load article metadata
 export async function getArticleMetadata(slug: string): Promise<ArticleMetadata> {
   try {
     const { metadata } = await import(`./articles/${slug}/metadata`);
@@ -54,7 +54,7 @@ export async function getArticleMetadata(slug: string): Promise<ArticleMetadata>
   }
 }
 
-// 动态加载文章内容
+// Dynamically load article content
 export async function getArticleContent(slug: string): Promise<ComponentType> {
   try {
     const { ArticleContent } = await import(`./articles/${slug}/content`);
@@ -64,7 +64,7 @@ export async function getArticleContent(slug: string): Promise<ComponentType> {
   }
 }
 
-// 获取完整的文章数据（元数据 + 内容）
+// Get complete article data (metadata + content)
 export async function getArticle(slug: string): Promise<Article> {
   const metadata = await getArticleMetadata(slug);
   const ContentComponent = await getArticleContent(slug);
@@ -75,19 +75,19 @@ export async function getArticle(slug: string): Promise<Article> {
   };
 }
 
-// 获取所有文章的元数据（用于列表页面）
+// Get metadata for all articles (for list pages)
 export async function getAllArticlesMetadata(): Promise<ArticleMetadata[]> {
   const metadataPromises = articleSlugs.map(slug => getArticleMetadata(slug));
   return Promise.all(metadataPromises);
 }
 
-// 获取所有文章的完整数据
+// Get complete data for all articles
 export async function getAllArticles(): Promise<Article[]> {
   const articlePromises = articleSlugs.map(slug => getArticle(slug));
   return Promise.all(articlePromises);
 }
 
-// 检查文章是否存在
+// Check if article exists
 export function articleExists(slug: string): boolean {
   return articleSlugs.includes(slug);
 }

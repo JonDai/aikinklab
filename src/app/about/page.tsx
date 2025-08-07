@@ -201,26 +201,26 @@ export default function AboutPage() {
       <section className="py-24 bg-layered-charcoal/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-playfair text-h2 text-warm-off-white mb-6">
-            我们的AI技术如何运作
+            How Our AI Technology Works
           </h2>
           
           <div className="text-neutral-gray leading-relaxed space-y-4 mb-8">
             <p>
-              我们的AI分析系统基于深度学习和自然语言处理技术，结合了心理学、性学和行为科学的最新研究成果。
-              系统通过分析用户的回答模式、选择偏好和反应时间，构建出多维度的个性画像。
+              Our AI analysis system is based on deep learning and natural language processing technologies, combined with the latest research findings in psychology, sexology, and behavioral science.
+              The system analyzes users' response patterns, choice preferences, and reaction times to build multi-dimensional personality profiles.
             </p>
             <p>
-              我们的算法经过数万个真实案例的训练和验证，能够识别出细微的个性特征和潜在倾向。
-              同时，我们持续优化模型，确保分析结果的准确性和相关性。
+              Our algorithms have been trained and validated on tens of thousands of real cases, capable of identifying subtle personality traits and potential tendencies.
+              We continuously optimize our models to ensure the accuracy and relevance of analysis results.
             </p>
             <p>
-              最重要的是，我们的技术设计始终将用户隐私放在首位。
-              所有数据处理都在加密环境中进行，个人信息永远不会被存储或分享。
+              Most importantly, our technology design always puts user privacy first.
+              All data processing occurs in encrypted environments, and personal information is never stored or shared.
             </p>
           </div>
           
           <a href="/test" className="btn-primary">
-            体验我们的AI分析
+            Experience Our AI Analysis
           </a>
         </div>
       </section>
