@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { trackPerformance } from '@/lib/performance';
+import { PerformanceMetrics } from '@/lib/performance';
 
 interface OptimizedImageProps {
   src: string;
@@ -50,7 +50,7 @@ export function OptimizedImage({
     const loadTime = performance.now() - loadStartTime;
     
     // Track image loading performance
-    trackPerformance('image-load-time', loadTime, 'images');
+    PerformanceMetrics.recordMetric('image-load-time', loadTime);
     
     if (onLoad) {
       onLoad();
@@ -62,7 +62,7 @@ export function OptimizedImage({
     setHasError(true);
     
     // Track image loading errors
-    trackPerformance('image-load-error', 1, 'images');
+    PerformanceMetrics.recordMetric('image-load-error', 1);
     
     if (onError) {
       onError();

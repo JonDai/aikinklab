@@ -138,13 +138,13 @@ export default defineConfig({
     /* Maximum time expect() should wait for the condition to be met */
     timeout: 10000,
     
-    /* Threshold for pixel comparisons */
-    threshold: 0.2,
-    
     /* Animation handling */
     toMatchSnapshot: {
-      mode: 'css',
-      caret: 'hide'
+      threshold: 0.2
+    },
+    
+    toHaveScreenshot: {
+      threshold: 0.2
     }
   },
 });

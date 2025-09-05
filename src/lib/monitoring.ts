@@ -227,7 +227,7 @@ export class HealthChecker {
   }> {
     const results: Record<string, boolean> = {};
     
-    for (const [name, checkFn] of this.checks.entries()) {
+    for (const [name, checkFn] of Array.from(this.checks.entries())) {
       try {
         results[name] = await Promise.race([
           checkFn(),

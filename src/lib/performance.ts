@@ -56,12 +56,10 @@ export class BundleAnalyzer {
   static analyzeChunkSizes(): Promise<any> {
     if (typeof window === 'undefined') return Promise.resolve({});
 
-    return import('webpack-bundle-analyzer/lib/analyzer')
-      .then((analyzer) => {
-        // This would analyze the bundle in development
-        return analyzer.analyzeBundle('.next/static/chunks');
-      })
-      .catch(() => ({}));
+    // Bundle analysis would be done at build time, not runtime
+    return Promise.resolve({
+      message: 'Bundle analysis should be done at build time with webpack-bundle-analyzer CLI'
+    });
   }
 
   // Check for unused dependencies

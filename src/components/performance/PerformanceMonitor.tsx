@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { initWebVitals } from '@/lib/performance';
+import { reportWebVitals } from '@/lib/performance';
 
 /**
  * Performance monitoring component
@@ -10,7 +10,9 @@ import { initWebVitals } from '@/lib/performance';
 export function PerformanceMonitor() {
   useEffect(() => {
     // Initialize Web Vitals tracking
-    initWebVitals();
+    reportWebVitals((metric) => {
+      console.log('Web Vital:', metric);
+    });
 
     // Track page visibility changes for better performance insights
     const handleVisibilityChange = () => {

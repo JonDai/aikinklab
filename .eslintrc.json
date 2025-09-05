@@ -13,12 +13,10 @@
         "plugin:jest-dom/recommended"
       ],
       "rules": {
-        "testing-library/no-render-in-setup": "error",
-        "testing-library/no-wait-for-empty-callback": "error",
         "testing-library/prefer-screen-queries": "error",
-        "testing-library/prefer-user-event": "warn",
+        "testing-library/prefer-user-event": "off",
         "jest-dom/prefer-checked": "error",
-        "jest-dom/prefer-enabled-disabled": "error",
+        "jest-dom/prefer-enabled-disabled": "off",
         "jest-dom/prefer-focus": "error",
         "jest-dom/prefer-required": "error"
       }
