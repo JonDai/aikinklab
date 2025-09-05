@@ -4,7 +4,8 @@
  */
 
 // Main controller
-export { SEOController } from './SEOController'
+import { SEOController } from './SEOController'
+export { SEOController }
 
 // Base agent class
 export { BaseAgent } from './agents/BaseAgent'

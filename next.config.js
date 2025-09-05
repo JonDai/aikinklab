@@ -87,11 +87,10 @@ const nextConfig = {
     },
   }),
   
-  // Experimental features for better performance
-  experimental: {
-    // Enable optimized CSS loading
-    optimizeCss: true,
-  },
+  // Experimental features for better performance (disabled for build stability)
+  // experimental: {
+  //   optimizeCss: true,
+  // },
 
   // Output configuration for static export (if needed)
   trailingSlash: false,

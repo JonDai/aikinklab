@@ -53,12 +53,12 @@ async function runKeywordResearchDemo() {
       })
 
       console.log('\n🌍 Sample Local Keywords:')
-      data.categorized.local.slice(0, 5).forEach((keyword, index) => {
+      data.categorized.local.slice(0, 5).forEach((keyword: string, index: number) => {
         console.log(`   ${index + 1}. "${keyword}"`)
       })
 
       console.log('\n💰 Sample Commercial Keywords:')
-      data.categorized.commercial.slice(0, 5).forEach((keyword, index) => {
+      data.categorized.commercial.slice(0, 5).forEach((keyword: string, index: number) => {
         console.log(`   ${index + 1}. "${keyword}"`)
       })
 
