@@ -48,7 +48,7 @@ async function runKeywordResearchDemo() {
       console.log(`   Commercial: ${data.categorized.commercial.length}\n`)
 
       console.log('🎯 Top 10 High Priority Keywords:')
-      data.prioritized.highPriority.slice(0, 10).forEach((keyword, index) => {
+      data.prioritized.highPriority.slice(0, 10).forEach((keyword: any, index: number) => {
         console.log(`   ${index + 1}. "${keyword.term}" (Priority: ${keyword.priority}, Commercial Value: ${keyword.commercialValue})`)
       })
 

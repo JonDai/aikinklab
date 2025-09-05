@@ -83,8 +83,38 @@ export function InteractiveFAQ() {
 
   const popularFAQs = faqs.filter(faq => faq.popular);
 
+  // Generate FAQPage structured data
+  const faqPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': 'https://www.aikinklab.com/#faq',
+    name: 'AIKinkLab - Frequently Asked Questions',
+    description: 'Frequently asked questions about AIKinkLab\'s kink and BDSM personality tests, privacy, and services.',
+    mainEntity: faqs.map(faq => ({
+      '@type': 'Question',
+      '@id': `https://www.aikinklab.com/#faq-${faq.id}`,
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer
+      }
+    })),
+    about: {
+      '@type': 'Thing',
+      name: 'Kink and BDSM Testing',
+      description: 'Information about kink personality testing, privacy, and user support'
+    },
+    inLanguage: 'en-US',
+    url: 'https://www.aikinklab.com/#faq'
+  };
+
   return (
-    <section className="py-24 bg-layered-charcoal/20">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageSchema) }}
+      />
+      <section className="py-24 bg-layered-charcoal/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="text-center mb-16">
@@ -93,7 +123,7 @@ export function InteractiveFAQ() {
             <span className="text-neon-magenta"> Questions</span>
           </h2>
           <p className="text-lg text-neutral-gray max-w-3xl mx-auto leading-relaxed">
-            We've compiled the questions users care about most to help you better understand our test
+            We&apos;ve compiled the questions users care about most to help you better understand our test
           </p>
         </div>
 
@@ -233,5 +263,6 @@ export function InteractiveFAQ() {
         </div>
       </div>
     </section>
+    </>
   );
 }

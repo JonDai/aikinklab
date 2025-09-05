@@ -3,12 +3,35 @@ import Link from 'next/link';
 import { ArrowRight, Shield, Brain, Clock, Users } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'The #1 AI BDSM Test - Private & Insightful | AIKinkLab',
-  description: 'Take the #1 AI BDSM test for a private and insightful analysis of your personality. Start your journey now at AIKinkLab.',
-    keywords: 'BDSM test, dominant submissive test, kink test, BDSM personality, sexual preferences test',
+  title: 'Free BDSM Test - AI-Powered Personality Analysis (2025) | AIKinkLab',
+  description: 'Take the most accurate BDSM test online. AI analysis reveals your personality in 15 minutes. Anonymous, scientific & trusted by 50,000+ users ✓',
+  keywords: 'bdsm test, bdsm personality test, free bdsm test, ai bdsm test, dominant submissive test, kink personality quiz, bdsm role test',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: '/bdsm-test',
+  },
   openGraph: {
-    title: 'BDSM Test - Discover Your BDSM Personality',
-    description: 'Professional BDSM personality test with AI-powered analysis.',
+    title: 'Free BDSM Test - AI-Powered Personality Analysis | AIKinkLab',
+    description: 'The most accurate BDSM test online. AI analysis reveals your personality in 15 minutes. Anonymous, scientific & trusted by 50,000+ users.',
+    type: 'website',
+    url: 'https://www.aikinklab.com/bdsm-test',
+    siteName: 'AIKinkLab',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Free BDSM Test - AI-Powered Personality Analysis | AIKinkLab',
+    description: 'The most accurate BDSM test online. AI analysis reveals your personality in 15 minutes. Anonymous & trusted by 50,000+ users.',
+    creator: '@aikinklab',
   },
 };
 

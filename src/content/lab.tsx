@@ -7,6 +7,7 @@ export interface Article {
   description: string;
   keywords: string;
   publishedTime: string;
+  modifiedTime?: string;
   author: string;
   tags: string[];
   readTime: string;
@@ -25,6 +26,7 @@ export interface ArticleMetadata {
   description: string;
   keywords: string;
   publishedTime: string;
+  modifiedTime?: string;
   author: string;
   tags: string[];
   readTime: string;

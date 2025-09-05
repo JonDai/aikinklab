@@ -7,7 +7,23 @@ Sitemap: https://aikinklab.com/sitemap.xml
 # Disallow crawling of dynamic result pages to avoid indexing temporary content
 Disallow: /results/
 
-# Allow crawling of all other pages
+# Disallow crawling of API routes and admin paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /.well-known/
+
+# Block common bot patterns that might affect performance
+User-agent: CCBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+# Allow crawling of all main content pages
 Allow: /test
 Allow: /bdsm-test
 Allow: /lab
@@ -16,3 +32,6 @@ Allow: /about
 Allow: /contact
 Allow: /privacy-policy
 Allow: /terms
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1

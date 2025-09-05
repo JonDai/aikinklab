@@ -223,7 +223,7 @@ export class KeywordResearchAgent extends BaseAgent {
 
     // Process each category
     Object.entries(categorized).forEach(([category, keywords]) => {
-      keywords.forEach(term => {
+      keywords.forEach((term: string) => {
         const keyword: Keyword = {
           id: generateId('kw'),
           term,

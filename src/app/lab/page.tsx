@@ -4,9 +4,36 @@ import { Calendar, Clock, ArrowRight, Search, Filter } from 'lucide-react';
 import { getAllArticlesMetadata } from '@/content/lab';
 
 export const metadata: Metadata = {
-  title: 'The Lab - Kink Education & BDSM Knowledge | AIKinkLab',
-  description: 'Explore our comprehensive collection of articles on kink education, BDSM knowledge, and sexual wellness. Expert insights and educational content from AIKinkLab.',
-  keywords: 'kink education, BDSM knowledge, sexual wellness, kink articles, BDSM guide, how to safely explore kinks, psychology behind kinks, talk about kinks with partner',
+  title: 'The Lab - Expert Kink Education & BDSM Guide (2025) | AIKinkLab',
+  description: 'Expert BDSM guides & kink education articles. Learn safety, psychology & communication. Trusted by 50,000+ users. Free comprehensive resources ✓',
+  keywords: 'kink education, BDSM guide, kink safety, BDSM psychology, kink communication, sexual wellness, BDSM articles, kink learning resources',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: '/lab',
+  },
+  openGraph: {
+    title: 'The Lab - Expert Kink Education & BDSM Guide | AIKinkLab',
+    description: 'Expert BDSM guides & kink education articles. Learn safety, psychology & communication. Trusted by 50,000+ users.',
+    type: 'website',
+    url: 'https://www.aikinklab.com/lab',
+    siteName: 'AIKinkLab',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'The Lab - Expert Kink Education & BDSM Guide | AIKinkLab',
+    description: 'Expert BDSM guides & kink education articles. Learn safety, psychology & communication. Trusted by 50,000+ users.',
+    creator: '@aikinklab',
+  },
 };
 
 

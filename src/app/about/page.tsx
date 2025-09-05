@@ -207,7 +207,7 @@ export default function AboutPage() {
           <div className="text-neutral-gray leading-relaxed space-y-4 mb-8">
             <p>
               Our AI analysis system is based on deep learning and natural language processing technologies, combined with the latest research findings in psychology, sexology, and behavioral science.
-              The system analyzes users' response patterns, choice preferences, and reaction times to build multi-dimensional personality profiles.
+              The system analyzes users&apos; response patterns, choice preferences, and reaction times to build multi-dimensional personality profiles.
             </p>
             <p>
               Our algorithms have been trained and validated on tens of thousands of real cases, capable of identifying subtle personality traits and potential tendencies.
