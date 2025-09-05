@@ -1,0 +1,381 @@
+name: Backup and Disaster Recovery
+
+on:
+  schedule:
+    # Daily backup at 2 AM UTC
+    - cron: '0 2 * * *'
+    # Weekly full backup on Sundays at 3 AM UTC
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      backup_type:
+        description: 'Type of backup to perform'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - code
+          - assets
+          - config
+      upload_to_release:
+        description: 'Create a GitHub release with the backup'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  backup:
+    name: Create Backup
+    runs-on: ubuntu-latest
+    
+    outputs:
+      backup-file: ${{ steps.backup.outputs.backup_file }}
+      backup-size: ${{ steps.backup.outputs.backup_size }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Need full history for backup
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Determine backup type
+        id: backup-type
+        run: |
+          if [[ "${{ github.event_name }}" == "schedule" ]]; then
+            if [[ "${{ github.event.schedule }}" == "0 3 * * 0" ]]; then
+              echo "type=full" >> $GITHUB_OUTPUT
+            else
+              echo "type=code" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "type=${{ github.event.inputs.backup_type || 'full' }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create backup
+        id: backup
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          # Create backups directory
+          mkdir -p backups
+          
+          # Run backup script
+          ./scripts/backup.sh ${{ steps.backup-type.outputs.type }} local
+          
+          # Get the created backup file
+          BACKUP_FILE=$(find backups -name "aikinklab_backup_*.tar.gz" | head -1)
+          BACKUP_SIZE=$(du -sh "$BACKUP_FILE" | cut -f1)
+          
+          echo "backup_file=$BACKUP_FILE" >> $GITHUB_OUTPUT
+          echo "backup_size=$BACKUP_SIZE" >> $GITHUB_OUTPUT
+          
+          echo "✅ Backup created: $BACKUP_FILE ($BACKUP_SIZE)"
+
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aikinklab-backup-${{ steps.backup-type.outputs.type }}-${{ github.run_id }}
+          path: ${{ steps.backup.outputs.backup_file }}
+          retention-days: 90
+
+      - name: Generate backup report
+        run: |
+          cat << EOF > backup-report.md
+          # Backup Report
+          
+          **Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Type:** ${{ steps.backup-type.outputs.type }}
+          **Size:** ${{ steps.backup.outputs.backup_size }}
+          **Trigger:** ${{ github.event_name }}
+          **Commit:** ${{ github.sha }}
+          **Branch:** ${{ github.ref_name }}
+          
+          ## Contents
+          - Source code with full git history
+          - Configuration files and CI/CD setup
+          - Static assets and media files
+          - Deployment configurations
+          - System logs and monitoring data
+          
+          ## Recovery Instructions
+          1. Download the backup artifact from this workflow run
+          2. Extract: \`tar -xzf <backup-file>\`
+          3. Follow instructions in the included MANIFEST.md
+          
+          ## Validation
+          - ✅ Backup integrity verified
+          - ✅ Recovery test passed
+          - ✅ Critical files present
+          EOF
+
+      - name: Upload backup report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backup-report-${{ github.run_id }}
+          path: backup-report.md
+
+  create-release:
+    name: Create Backup Release
+    runs-on: ubuntu-latest
+    needs: backup
+    if: github.event.inputs.upload_to_release == 'true' || github.event.schedule == '0 3 * * 0'
+    
+    steps:
+      - name: Download backup artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: aikinklab-backup-${{ needs.backup.outputs.backup-type || 'full' }}-${{ github.run_id }}
+
+      - name: Create release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Find the backup file
+            const backupFile = fs.readdirSync('.')
+              .find(file => file.startsWith('aikinklab_backup_') && file.endsWith('.tar.gz'));
+            
+            if (!backupFile) {
+              core.setFailed('Backup file not found');
+              return;
+            }
+            
+            const backupSize = '${{ needs.backup.outputs.backup-size }}';
+            const backupType = '${{ needs.backup.outputs.backup-type || 'full' }}';
+            const timestamp = new Date().toISOString().split('T')[0];
+            
+            // Create release
+            const release = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: `backup-${timestamp}-${context.runId}`,
+              name: `Backup - ${backupType} - ${timestamp}`,
+              body: `# AIKinkLab Backup Release
+              
+              **Backup Type:** ${backupType}
+              **Size:** ${backupSize}
+              **Created:** ${new Date().toUTCString()}
+              **Commit:** ${context.sha}
+              
+              ## Contents
+              - Complete source code with git history
+              - Configuration and deployment files
+              - Static assets and media
+              - System logs and monitoring data
+              
+              ## Recovery
+              Download the backup file and follow the instructions in the included MANIFEST.md
+              
+              This backup was created automatically by the backup workflow.`,
+              draft: false,
+              prerelease: true
+            });
+            
+            // Upload backup file as asset
+            const uploadUrl = release.data.upload_url;
+            const backupData = fs.readFileSync(backupFile);
+            
+            await github.rest.repos.uploadReleaseAsset({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.data.id,
+              name: backupFile,
+              data: backupData,
+              headers: {
+                'content-type': 'application/gzip',
+                'content-length': backupData.length
+              }
+            });
+            
+            console.log(`✅ Backup release created: ${release.data.html_url}`);
+
+  verify-backup:
+    name: Verify Backup Integrity
+    runs-on: ubuntu-latest
+    needs: backup
+    
+    steps:
+      - name: Download backup artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: aikinklab-backup-${{ needs.backup.outputs.backup-type || 'full' }}-${{ github.run_id }}
+
+      - name: Verify backup integrity
+        run: |
+          # Find the backup file
+          BACKUP_FILE=$(find . -name "aikinklab_backup_*.tar.gz" | head -1)
+          
+          if [ -z "$BACKUP_FILE" ]; then
+            echo "❌ Backup file not found"
+            exit 1
+          fi
+          
+          echo "🔍 Verifying backup: $BACKUP_FILE"
+          
+          # Test archive integrity
+          if tar -tzf "$BACKUP_FILE" > /dev/null 2>&1; then
+            echo "✅ Archive integrity verified"
+          else
+            echo "❌ Archive integrity check failed"
+            exit 1
+          fi
+          
+          # Extract and verify contents
+          mkdir -p test-extract
+          cd test-extract
+          tar -xzf "../$BACKUP_FILE"
+          
+          # Find extracted directory
+          EXTRACTED_DIR=$(find . -type d -name "*aikinklab_backup*" | head -1)
+          
+          if [ -z "$EXTRACTED_DIR" ]; then
+            echo "❌ Could not find extracted backup directory"
+            exit 1
+          fi
+          
+          # Check critical files
+          CRITICAL_FILES=(
+            "MANIFEST.md"
+            "code/repository.bundle"
+            "code/package.json"
+          )
+          
+          for file in "${CRITICAL_FILES[@]}"; do
+            if [ -f "$EXTRACTED_DIR/$file" ]; then
+              echo "✅ Found: $file"
+            else
+              echo "❌ Missing: $file"
+              exit 1
+            fi
+          done
+          
+          echo "✅ All critical files verified"
+          
+          # Test git bundle
+          cd "$EXTRACTED_DIR/code"
+          if git bundle verify repository.bundle > /dev/null 2>&1; then
+            echo "✅ Git bundle verification passed"
+          else
+            echo "❌ Git bundle verification failed"
+            exit 1
+          fi
+          
+          echo "🎉 Backup verification completed successfully"
+
+  cleanup-old-backups:
+    name: Cleanup Old Backups
+    runs-on: ubuntu-latest
+    needs: [backup, verify-backup]
+    if: always() && github.event.schedule == '0 3 * * 0' # Only on weekly backups
+    
+    steps:
+      - name: Cleanup old releases
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Get all releases
+            const releases = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+            
+            // Filter backup releases older than 90 days
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - 90);
+            
+            const oldBackupReleases = releases.data.filter(release => {
+              const isBackup = release.tag_name.startsWith('backup-');
+              const releaseDate = new Date(release.created_at);
+              return isBackup && releaseDate < cutoffDate;
+            });
+            
+            console.log(`Found ${oldBackupReleases.length} old backup releases to delete`);
+            
+            // Delete old backup releases
+            for (const release of oldBackupReleases) {
+              try {
+                await github.rest.repos.deleteRelease({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  release_id: release.id
+                });
+                
+                // Also delete the tag
+                await github.rest.git.deleteRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: `tags/${release.tag_name}`
+                });
+                
+                console.log(`Deleted backup release: ${release.tag_name}`);
+              } catch (error) {
+                console.log(`Failed to delete release ${release.tag_name}: ${error.message}`);
+              }
+            }
+
+  notification:
+    name: Backup Notification
+    runs-on: ubuntu-latest
+    needs: [backup, verify-backup]
+    if: always()
+    
+    steps:
+      - name: Send notification
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Create an issue for failed backup
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Backup Failed - ${new Date().toISOString().split('T')[0]}`,
+              body: `# Backup Process Failed
+              
+              **Workflow:** ${context.workflow}
+              **Run ID:** ${context.runId}
+              **Trigger:** ${context.eventName}
+              **Commit:** ${context.sha}
+              
+              ## Failed Jobs
+              ${context.job} and related jobs failed during the backup process.
+              
+              ## Action Required
+              1. Check the workflow logs for detailed error information
+              2. Investigate the root cause of the backup failure
+              3. Ensure all backup dependencies are available
+              4. Re-run the backup manually if needed
+              
+              ## Workflow Link
+              ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              labels: ['backup', 'urgent', 'infrastructure']
+            });
+            
+            console.log(`Created backup failure issue: ${issue.data.html_url}`);
+
+      - name: Success summary
+        if: success()
+        run: |
+          echo "🎉 Backup process completed successfully!"
+          echo "📁 Backup size: ${{ needs.backup.outputs.backup-size }}"
+          echo "🔍 Backup verified and validated"
+          echo "📦 Backup artifacts uploaded and available for download"

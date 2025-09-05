@@ -1,3 +1,27 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "**/__tests__/**/*.{js,jsx,ts,tsx}",
+        "**/*.{test,spec}.{js,jsx,ts,tsx}"
+      ],
+      "extends": [
+        "plugin:testing-library/react",
+        "plugin:jest-dom/recommended"
+      ],
+      "rules": {
+        "testing-library/no-render-in-setup": "error",
+        "testing-library/no-wait-for-empty-callback": "error",
+        "testing-library/prefer-screen-queries": "error",
+        "testing-library/prefer-user-event": "warn",
+        "jest-dom/prefer-checked": "error",
+        "jest-dom/prefer-enabled-disabled": "error",
+        "jest-dom/prefer-focus": "error",
+        "jest-dom/prefer-required": "error"
+      }
+    }
+  ]
 }

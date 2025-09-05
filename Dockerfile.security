@@ -1,0 +1,93 @@
+# Security-focused Docker image for scanning
+FROM node:18-alpine AS base
+
+# Install security tools
+RUN apk add --no-cache \
+    curl \
+    git \
+    bash \
+    ca-certificates \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy application code
+COPY . .
+
+# Set ownership
+RUN chown -R nextjs:nodejs /app
+USER nextjs
+
+# Security scanning stage
+FROM base AS security-scan
+
+USER root
+
+# Install security scanning tools
+RUN npm install -g \
+    audit-ci \
+    retire \
+    eslint-plugin-security \
+    && rm -rf /root/.npm
+
+# Copy security configurations
+COPY --chown=nextjs:nodejs audit-ci.json ./
+COPY --chown=nextjs:nodejs .eslintrc.security.json ./
+
+USER nextjs
+
+# Run security checks
+RUN npm audit --audit-level high || true
+RUN audit-ci --config audit-ci.json || true
+
+# Build stage with security optimizations
+FROM base AS build
+
+# Build the application
+RUN npm run build
+
+# Production stage with minimal attack surface
+FROM node:18-alpine AS production
+
+# Security hardening
+RUN apk add --no-cache dumb-init && \
+    addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001 && \
+    mkdir -p /app && \
+    chown -R nextjs:nodejs /app
+
+WORKDIR /app
+
+# Copy built application
+COPY --from=build --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=build --chown=nextjs:nodejs /app/public ./public
+COPY --from=build --chown=nextjs:nodejs /app/package.json ./package.json
+COPY --from=build --chown=nextjs:nodejs /app/node_modules ./node_modules
+
+USER nextjs
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000/api/health || exit 1
+
+# Security labels
+LABEL security.scan=true \
+      security.no-new-privileges=true \
+      security.user=nextjs
+
+EXPOSE 3000
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["npm", "start"]

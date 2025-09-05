@@ -4,12 +4,14 @@ import './globals.css';
 import { Navigation } from '@/components/layout/Navigation';
 import { Footer } from '@/components/layout/Footer';
 import { Providers } from '@/components/providers/Providers';
+import { PerformanceMonitor } from '@/components/performance/PerformanceMonitor';
 
 const inter = Inter({ 
   subsets: ['latin'], 
   variable: '--font-inter',
   display: 'swap',
   fallback: ['system-ui', 'arial'],
+  preload: true,
 });
 
 const playfair = Playfair_Display({ 
@@ -17,6 +19,7 @@ const playfair = Playfair_Display({
   variable: '--font-playfair',
   display: 'swap',
   fallback: ['Georgia', 'serif'],
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -158,6 +161,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col">
         <Providers>
+          <PerformanceMonitor />
           <Navigation />
           <main className="flex-1">
             {children}

@@ -4,10 +4,19 @@ const nextConfig = {
   compiler: {
     // Remove console logs in production
     removeConsole: process.env.NODE_ENV === 'production',
+    // Enable SWC minification for better performance
+    styledComponents: true,
   },
+  
+  // Enable output standalone for better deployment
+  output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
   
   // Compression and caching
   compress: true,
+  
+  // Enable power optimizations
+  poweredByHeader: false,
+  reactStrictMode: true,
   
   // Image optimization configuration
   images: {
@@ -50,12 +59,13 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
-  // Security headers
+  // Security and performance headers
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
+          // Security headers
           {
             key: 'X-Frame-Options',
             value: 'DENY',
@@ -71,7 +81,35 @@ const nextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
+          },
+          // Performance headers
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
           }
+        ],
+      },
+      // Cache static assets
+      {
+        source: '/images/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
         ],
       },
     ];
@@ -87,24 +125,89 @@ const nextConfig = {
     },
   }),
   
-  // Experimental features for better performance (disabled for build stability)
-  // experimental: {
-  //   optimizeCss: true,
-  // },
+  // Experimental features for better performance
+  experimental: {
+    // Enable modern CSS optimization
+    optimizeCss: true,
+    // Enable serverless target optimizations
+    serverMinification: true,
+    // Optimize server components
+    serverComponentsExternalPackages: ['web-vitals'],
+    // Enable turbo mode for faster builds
+    turbo: {
+      loaders: {
+        // Optimize SVG loading
+        '.svg': ['@svgr/webpack'],
+      },
+    },
+  },
 
   // Output configuration for static export (if needed)
   trailingSlash: false,
   
-  // Webpack optimizations
-  webpack: (config, { dev, isServer }) => {
-    // Tree shaking optimizations
-    if (!dev && !isServer) {
+  // Advanced webpack optimizations
+  webpack: (config, { dev, isServer, webpack }) => {
+    // Production optimizations
+    if (!dev) {
+      // Tree shaking optimizations
       config.optimization = {
         ...config.optimization,
         usedExports: true,
         sideEffects: false,
+        // Advanced code splitting
+        splitChunks: {
+          ...config.optimization.splitChunks,
+          cacheGroups: {
+            ...config.optimization.splitChunks?.cacheGroups,
+            // Separate vendor chunks for better caching
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+              priority: 10,
+            },
+            // React specific chunk
+            react: {
+              test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+              name: 'react',
+              chunks: 'all',
+              priority: 20,
+            },
+            // Common chunks
+            common: {
+              name: 'common',
+              minChunks: 2,
+              chunks: 'all',
+              priority: 5,
+              reuseExistingChunk: true,
+            },
+          },
+        },
       };
+
+      // Bundle analyzer in production builds when ANALYZE=true
+      if (process.env.ANALYZE === 'true') {
+        const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+        config.plugins.push(new BundleAnalyzerPlugin({
+          analyzerMode: 'static',
+          openAnalyzer: false,
+        }));
+      }
     }
+
+    // Optimize imports
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      // Optimize lodash imports
+      'lodash': 'lodash-es',
+    };
+
+    // Add performance hints
+    config.performance = {
+      ...config.performance,
+      maxAssetSize: 250000, // 250KB
+      maxEntrypointSize: 400000, // 400KB
+    };
     
     return config;
   },

@@ -1,0 +1,295 @@
+name: Performance Monitoring
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Weekly on Sunday
+  workflow_dispatch: # Manual trigger
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'next.config.js'
+
+jobs:
+  lighthouse-audit:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build application
+      run: npm run build
+
+    - name: Start application
+      run: |
+        npm run start &
+        sleep 10
+
+    - name: Run Lighthouse audit
+      uses: treosh/lighthouse-ci-action@v10
+      with:
+        configPath: './.lighthouserc.js'
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+
+    - name: Check performance scores
+      run: |
+        echo "Lighthouse audit completed"
+        echo "Check the results in the action artifacts"
+
+  bundle-analysis:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install bundle analyzer
+      run: npm install -g @next/bundle-analyzer
+
+    - name: Build with analyzer
+      run: |
+        ANALYZE=true npm run build
+
+    - name: Generate bundle report
+      run: |
+        echo "## Bundle Analysis Report" >> bundle-report.md
+        echo "Generated on: $(date)" >> bundle-report.md
+        echo "" >> bundle-report.md
+        
+        echo "### Bundle Sizes" >> bundle-report.md
+        du -sh .next/static/chunks/* | sort -hr | head -10 >> bundle-report.md
+        
+        echo "" >> bundle-report.md
+        echo "### Total Size" >> bundle-report.md
+        du -sh .next/static >> bundle-report.md
+
+    - name: Upload bundle analysis
+      uses: actions/upload-artifact@v4
+      with:
+        name: bundle-analysis
+        path: |
+          bundle-report.md
+          .next/analyze/
+
+  core-web-vitals:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Playwright
+      run: npx playwright install --with-deps chromium
+
+    - name: Build application
+      run: npm run build
+
+    - name: Start application
+      run: |
+        npm run start &
+        sleep 10
+
+    - name: Measure Core Web Vitals
+      run: |
+        cat > measure-cwv.js << 'EOF'
+        const { chromium } = require('playwright');
+
+        (async () => {
+          const browser = await chromium.launch();
+          const page = await browser.newPage();
+
+          // Navigate to the page
+          await page.goto('http://localhost:3000');
+
+          // Wait for load
+          await page.waitForLoadState('networkidle');
+
+          // Measure Core Web Vitals
+          const metrics = await page.evaluate(() => {
+            return new Promise((resolve) => {
+              const vitals = {};
+              
+              new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                  if (entry.name === 'FCP') {
+                    vitals.fcp = entry.value;
+                  } else if (entry.name === 'LCP') {
+                    vitals.lcp = entry.value;
+                  }
+                }
+              }).observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+
+              // Also measure FID simulation and CLS
+              setTimeout(() => {
+                vitals.domContentLoaded = performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart;
+                vitals.loadComplete = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                resolve(vitals);
+              }, 3000);
+            });
+          });
+
+          console.log('Core Web Vitals:');
+          console.log('FCP (First Contentful Paint):', metrics.fcp || 'N/A');
+          console.log('LCP (Largest Contentful Paint):', metrics.lcp || 'N/A');
+          console.log('DOM Content Loaded:', metrics.domContentLoaded);
+          console.log('Load Complete:', metrics.loadComplete);
+
+          // Test the test page as well
+          await page.goto('http://localhost:3000/test');
+          await page.waitForLoadState('networkidle');
+
+          const testPageMetrics = await page.evaluate(() => {
+            return {
+              domContentLoaded: performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart,
+              loadComplete: performance.timing.loadEventEnd - performance.timing.navigationStart
+            };
+          });
+
+          console.log('\nTest Page Metrics:');
+          console.log('DOM Content Loaded:', testPageMetrics.domContentLoaded);
+          console.log('Load Complete:', testPageMetrics.loadComplete);
+
+          await browser.close();
+        })();
+        EOF
+
+        node measure-cwv.js
+
+  memory-leak-detection:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Playwright
+      run: npx playwright install --with-deps chromium
+
+    - name: Build application
+      run: npm run build
+
+    - name: Start application
+      run: |
+        npm run start &
+        sleep 10
+
+    - name: Memory leak test
+      run: |
+        cat > memory-test.js << 'EOF'
+        const { chromium } = require('playwright');
+
+        (async () => {
+          const browser = await chromium.launch();
+          const page = await browser.newPage();
+
+          console.log('Starting memory leak detection...');
+
+          // Initial memory measurement
+          await page.goto('http://localhost:3000');
+          await page.waitForLoadState('networkidle');
+
+          const initialMemory = await page.evaluate(() => {
+            if (performance.memory) {
+              return {
+                used: performance.memory.usedJSHeapSize,
+                total: performance.memory.totalJSHeapSize,
+                limit: performance.memory.jsHeapSizeLimit
+              };
+            }
+            return null;
+          });
+
+          console.log('Initial memory:', initialMemory);
+
+          // Simulate user interactions
+          for (let i = 0; i < 5; i++) {
+            await page.goto('http://localhost:3000/test');
+            await page.waitForLoadState('networkidle');
+            
+            // Complete a test
+            for (let q = 0; q < 5; q++) {
+              await page.click('button.quiz-option >> nth=0');
+              if (q < 4) {
+                await page.click('button:has-text("Next")');
+              } else {
+                await page.click('button:has-text("Complete Test")');
+              }
+              await page.waitForTimeout(500);
+            }
+
+            await page.waitForTimeout(2000);
+          }
+
+          // Final memory measurement
+          const finalMemory = await page.evaluate(() => {
+            if (performance.memory) {
+              return {
+                used: performance.memory.usedJSHeapSize,
+                total: performance.memory.totalJSHeapSize,
+                limit: performance.memory.jsHeapSizeLimit
+              };
+            }
+            return null;
+          });
+
+          console.log('Final memory:', finalMemory);
+
+          if (initialMemory && finalMemory) {
+            const memoryGrowth = finalMemory.used - initialMemory.used;
+            console.log('Memory growth:', memoryGrowth, 'bytes');
+            
+            // Alert if memory growth is excessive (> 50MB)
+            if (memoryGrowth > 50 * 1024 * 1024) {
+              console.error('WARNING: Potential memory leak detected!');
+              console.error('Memory grew by', Math.round(memoryGrowth / 1024 / 1024), 'MB');
+              process.exit(1);
+            } else {
+              console.log('Memory usage looks healthy');
+            }
+          }
+
+          await browser.close();
+        })();
+        EOF
+
+        node memory-test.js
