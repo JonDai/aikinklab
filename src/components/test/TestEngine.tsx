@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, ArrowRight, CheckCircle, Save, Play } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle, Save, Play, Sparkles, Brain, Shield, Clock, Zap } from 'lucide-react';
 import { kinkTestQuestions, TestQuestion } from '@/data/kinkTest';
 import { calculateKinkPersonality } from '@/data/kinkResults';
+import { TestLoading, AnalysisLoading } from '@/components/ui/LoadingStates';
 
 interface TestEngineProps {
   onComplete?: (results: any) => void;
@@ -172,11 +173,7 @@ export function TestEngine({ onComplete, showPreview = false }: TestEngineProps)
   };
 
   if (!session || !kinkTestQuestions.length) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-neon-magenta"></div>
-      </div>
-    );
+    return <TestLoading />;
   }
 
   const currentQuestion = kinkTestQuestions[currentQuestionIndex];
@@ -184,152 +181,274 @@ export function TestEngine({ onComplete, showPreview = false }: TestEngineProps)
   const isLastQuestion = currentQuestionIndex >= kinkTestQuestions.length - 1;
 
   if (showResults || session.completed) {
+    // Simulate different analysis stages
+    const [analysisStage, setAnalysisStage] = useState<'processing' | 'analyzing' | 'generating' | 'complete'>('processing');
+    const [analysisProgress, setAnalysisProgress] = useState(0);
+    
+    useEffect(() => {
+      const stages = ['processing', 'analyzing', 'generating', 'complete'] as const;
+      let currentStageIndex = 0;
+      let progress = 0;
+      
+      const interval = setInterval(() => {
+        progress += Math.random() * 15 + 5; // Random progress increment
+        setAnalysisProgress(Math.min(progress, 100));
+        
+        if (progress >= 25 && currentStageIndex === 0) {
+          setAnalysisStage('analyzing');
+          currentStageIndex = 1;
+        } else if (progress >= 60 && currentStageIndex === 1) {
+          setAnalysisStage('generating');
+          currentStageIndex = 2;
+        } else if (progress >= 90 && currentStageIndex === 2) {
+          setAnalysisStage('complete');
+          currentStageIndex = 3;
+        }
+        
+        if (progress >= 100) {
+          clearInterval(interval);
+          // Navigate to results after a brief delay
+          setTimeout(() => {
+            const resultId = generateSessionId();
+            localStorage.setItem(`result_${resultId}`, JSON.stringify({
+              results: calculateKinkPersonality(session.responses.reduce((acc, response) => {
+                acc[response.questionId] = response.answer;
+                return acc;
+              }, {} as Record<string, any>)),
+              session,
+              timestamp: new Date()
+            }));
+            router.push(`/results/${resultId}`);
+          }, 1500);
+        }
+      }, 300);
+      
+      return () => clearInterval(interval);
+    }, [session, router]);
+    
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="max-w-md mx-auto px-4 text-center">
-          <div className="w-16 h-16 bg-neon-magenta/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-8 h-8 text-neon-magenta animate-pulse" />
-          </div>
-          <h2 className="font-playfair text-h2 text-warm-off-white mb-4">
-            Analysis Complete!
-          </h2>
-          <p className="text-neutral-gray mb-6">
-            Our AI is analyzing your {session.responses.length} responses to create your comprehensive personality profile...
-          </p>
-          <div className="w-full bg-layered-charcoal rounded-full h-3 mb-4">
-            <div className="bg-gradient-to-r from-neon-magenta to-matte-gold h-3 rounded-full animate-pulse" style={{ width: '100%' }} />
-          </div>
-          <p className="text-sm text-neutral-gray">
-            This usually takes 10-15 seconds for optimal accuracy
-          </p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900 px-4">
+        <AnalysisLoading stage={analysisStage} progress={analysisProgress} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen py-12 md:py-24">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header with Progress */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-neutral-gray">
-                Question {currentQuestionIndex + 1} of {kinkTestQuestions.length}
-              </span>
+    <div className="min-h-screen bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900 py-8 md:py-16">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Enhanced Header with Progress */}
+        <div className="mb-12">
+          {/* Top status bar */}
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-4 sm:space-y-0">
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-primary-400 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-surface-300">
+                  Question {currentQuestionIndex + 1} of {kinkTestQuestions.length}
+                </span>
+              </div>
               <button
                 onClick={saveProgress}
-                className="flex items-center space-x-1 text-xs text-neutral-gray hover:text-warm-off-white transition-colors"
+                className="flex items-center space-x-2 text-xs text-surface-400 hover:text-surface-300 transition-colors bg-surface-800/30 rounded-lg px-3 py-1.5 backdrop-blur-sm"
               >
                 <Save className="w-3 h-3" />
                 <span>Auto-saved</span>
               </button>
             </div>
-            <div className="text-right">
-              <div className="text-sm text-neutral-gray mb-1">
-                {Math.round(progress)}% Complete
-              </div>
-              <div className="text-xs text-matte-gold">
-                ~{Math.ceil((kinkTestQuestions.length - currentQuestionIndex - 1) * 0.5)} min remaining
+            
+            <div className="flex items-center space-x-6">
+              <div className="text-right">
+                <div className="text-lg font-semibold text-white mb-0.5">
+                  {Math.round(progress)}% Complete
+                </div>
+                <div className="flex items-center space-x-2 text-xs text-accent-400">
+                  <Clock className="w-3 h-3" />
+                  <span>~{Math.ceil((kinkTestQuestions.length - currentQuestionIndex - 1) * 0.5)} min left</span>
+                </div>
               </div>
             </div>
           </div>
           
-          {/* Enhanced Progress Bar */}
-          <div className="w-full bg-layered-charcoal rounded-full h-3 relative overflow-hidden">
-            <div 
-              className="bg-gradient-to-r from-neon-magenta to-matte-gold h-3 rounded-full transition-all duration-700 ease-out relative"
-              style={{ width: `${progress}%` }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+          {/* Enhanced Progress Bar with Modern Styling */}
+          <div className="space-y-4 mb-8">
+            <div className="progress-modern bg-surface-800/50 backdrop-blur-sm shadow-inner">
+              <div 
+                className="progress-fill bg-gradient-to-r from-primary-500 via-primary-400 to-accent-400 shadow-glow-primary relative overflow-hidden transition-all duration-1000 ease-out"
+                style={{ width: `${progress}%` }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"></div>
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-primary-600/20 to-transparent"></div>
+              </div>
+            </div>
+            
+            {/* Enhanced progress milestones */}
+            <div className="flex justify-between text-xs">
+              <div className={`flex items-center space-x-1 px-2 py-1 rounded-lg transition-all duration-300 ${
+                progress >= 25 ? 'text-primary-400 bg-primary-400/10' : 'text-surface-500'
+              }`}>
+                <div className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  progress >= 25 ? 'bg-primary-400 animate-pulse' : 'bg-surface-500'
+                }`}></div>
+                <span className="font-medium">25%</span>
+              </div>
+              <div className={`flex items-center space-x-1 px-2 py-1 rounded-lg transition-all duration-300 ${
+                progress >= 50 ? 'text-primary-400 bg-primary-400/10' : 'text-surface-500'
+              }`}>
+                <div className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  progress >= 50 ? 'bg-primary-400 animate-pulse' : 'bg-surface-500'
+                }`}></div>
+                <span className="font-medium">50%</span>
+              </div>
+              <div className={`flex items-center space-x-1 px-2 py-1 rounded-lg transition-all duration-300 ${
+                progress >= 75 ? 'text-primary-400 bg-primary-400/10' : 'text-surface-500'
+              }`}>
+                <div className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  progress >= 75 ? 'bg-primary-400 animate-pulse' : 'bg-surface-500'
+                }`}></div>
+                <span className="font-medium">75%</span>
+              </div>
+              <div className={`flex items-center space-x-1 px-2 py-1 rounded-lg transition-all duration-300 ${
+                progress >= 100 ? 'text-accent-400 bg-accent-400/10' : 'text-surface-500'
+              }`}>
+                <div className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  progress >= 100 ? 'bg-accent-400 animate-pulse' : 'bg-surface-500'
+                }`}></div>
+                <span className="font-medium">Complete</span>
+              </div>
             </div>
           </div>
           
-          {/* Category Badge */}
-          <div className="mt-4 flex justify-center">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-neon-magenta/10 border border-neon-magenta/20">
-              <div className="w-2 h-2 bg-neon-magenta rounded-full mr-2"></div>
-              <span className="text-xs text-neon-magenta capitalize">
-                {currentQuestion.category.replace('-', ' ')}
+          {/* Enhanced Category Badge */}
+          <div className="flex justify-center">
+            <div className="inline-flex items-center space-x-3 bg-surface-800/40 backdrop-blur-lg rounded-2xl px-6 py-3 border border-primary-500/20 group hover:border-primary-500/40 transition-all duration-300">
+              <div className="relative">
+                <div className="w-3 h-3 bg-primary-400 rounded-full animate-pulse"></div>
+                <div className="absolute inset-0 w-3 h-3 bg-primary-400 rounded-full animate-ping opacity-30"></div>
+              </div>
+              <span className="text-sm font-medium text-primary-300 capitalize tracking-wide">
+                {currentQuestion.category.replace('-', ' ')} Assessment
               </span>
+              <Sparkles className="w-4 h-4 text-primary-400 opacity-70 group-hover:opacity-100 transition-opacity" />
             </div>
           </div>
         </div>
 
-        {/* Question Card */}
-        <div className="bg-gradient-to-br from-layered-charcoal to-warm-charcoal border border-neutral-gray/20 rounded-3xl p-8 md:p-12 mb-8 shadow-2xl backdrop-blur-sm">
-          {/* Question Header */}
-          <div className="text-center mb-8">
-            <h2 className="font-playfair text-2xl md:text-3xl text-warm-off-white mb-4 leading-relaxed">
-              {currentQuestion.question}
-            </h2>
-            {currentQuestion.description && (
-              <p className="text-neutral-gray text-sm md:text-base max-w-2xl mx-auto">
-                {currentQuestion.description}
-              </p>
-            )}
+        {/* Enhanced Question Card with Modern Glassmorphism */}
+        <div className="card-glass-intense relative group mb-10 overflow-hidden animate-fade-in-up">
+          {/* Enhanced ambient glow effects */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/8 via-transparent to-accent-500/6 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+          <div className="absolute top-0 left-1/4 w-1/2 h-px bg-gradient-to-r from-transparent via-primary-400/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          
+          {/* Enhanced Question Header */}
+          <div className="relative text-center mb-12">
+            <div className="mb-8">
+              <div className="inline-flex items-center space-x-2 bg-surface-800/30 backdrop-blur-sm rounded-2xl px-4 py-2 mb-6 animate-fade-in stagger-1">
+                <div className="w-2 h-2 bg-primary-400 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-surface-400 uppercase tracking-wider">
+                  Question {currentQuestionIndex + 1}
+                </span>
+              </div>
+              <h2 className="font-playfair text-2xl md:text-3xl lg:text-4xl text-white mb-6 leading-relaxed animate-fade-in stagger-2">
+                {currentQuestion.question}
+              </h2>
+              {currentQuestion.description && (
+                <div className="max-w-3xl mx-auto animate-fade-in stagger-3">
+                  <p className="text-surface-300 text-base md:text-lg leading-relaxed">
+                    {currentQuestion.description}
+                  </p>
+                </div>
+              )}
+            </div>
+            
+            {/* Enhanced question context indicator */}
+            <div className="flex items-center justify-center space-x-3 text-sm text-surface-500 animate-fade-in stagger-4">
+              <div className="flex items-center space-x-2 bg-surface-800/20 backdrop-blur-sm rounded-xl px-3 py-2">
+                <Brain className="w-4 h-4 text-primary-400 animate-pulse" />
+                <span className="font-medium">Take your time and answer honestly</span>
+              </div>
+            </div>
           </div>
 
-          {/* Answer Options */}
-          <div className="space-y-4">
+          {/* Enhanced Answer Options with Modern Styling */}
+          <div className="relative space-y-5">
             {currentQuestion.type === 'multiple-choice' && currentQuestion.options?.map((option, index) => (
               <button
                 key={option.id}
                 onClick={() => handleAnswerSelect(option.id)}
-                className={`w-full text-left p-6 rounded-2xl border-2 transition-all duration-300 group hover:scale-[1.02] ${
-                  selectedAnswer === option.id
-                    ? 'border-neon-magenta bg-neon-magenta/10 shadow-lg shadow-neon-magenta/20'
-                    : 'border-neutral-gray/30 bg-layered-charcoal/50 hover:border-neon-magenta/50'
-                }`}
-                style={{ animationDelay: `${index * 100}ms` }}
+                className={`quiz-option-enhanced w-full text-left relative overflow-hidden transition-all duration-400 ease-out-back hover:scale-[1.02] ${selectedAnswer === option.id ? 'selected' : ''} animate-fade-in-up`}
+                style={{ animationDelay: `${(index * 100) + 600}ms` }}
               >
-                <div className="flex items-start">
-                  <div className={`w-6 h-6 rounded-full border-2 mr-4 mt-1 flex-shrink-0 flex items-center justify-center transition-all duration-300 ${
+                <div className="flex items-start space-x-5">
+                  <div className={`relative flex-shrink-0 w-7 h-7 rounded-full border-2 transition-all duration-400 shadow-lg ${
                     selectedAnswer === option.id
-                      ? 'border-neon-magenta bg-neon-magenta'
-                      : 'border-neutral-gray group-hover:border-neon-magenta/50'
+                      ? 'border-primary-400 bg-primary-400/20'
+                      : 'border-surface-500 group-hover:border-primary-400'
                   }`}>
                     {selectedAnswer === option.id && (
-                      <div className="w-2 h-2 bg-warm-off-white rounded-full"></div>
+                      <div className="absolute inset-1.5 bg-primary-400 rounded-full animate-scale-in"></div>
                     )}
                   </div>
-                  <div className="flex-1">
-                    <div className="text-warm-off-white text-lg mb-1">
+                  <div className="flex-1 space-y-2">
+                    <div className={`text-lg font-medium transition-colors duration-300 ${
+                      selectedAnswer === option.id 
+                        ? 'text-white' 
+                        : 'text-surface-200 group-hover:text-white'
+                    }`}>
                       {option.text}
                     </div>
                     {option.description && (
-                      <div className="text-neutral-gray text-sm">
+                      <div className={`text-sm transition-colors duration-300 ${
+                        selectedAnswer === option.id 
+                          ? 'text-surface-300' 
+                          : 'text-surface-400 group-hover:text-surface-300'
+                      }`}>
                         {option.description}
                       </div>
                     )}
                   </div>
+                  {selectedAnswer === option.id && (
+                    <div className="flex-shrink-0">
+                      <CheckCircle className="w-5 h-5 text-primary-400 animate-scale-in" />
+                    </div>
+                  )}
                 </div>
+                {selectedAnswer === option.id && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/8 via-primary-600/5 to-accent-500/3 -z-10 rounded-2xl"></div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 -z-10 rounded-2xl"></div>
               </button>
             ))}
 
             {currentQuestion.type === 'scale' && currentQuestion.scaleConfig && (
-              <div className="py-8">
-                <div className="flex justify-between mb-4">
-                  <span className="text-sm text-neutral-gray">{currentQuestion.scaleConfig.minLabel}</span>
-                  <span className="text-sm text-neutral-gray">{currentQuestion.scaleConfig.maxLabel}</span>
+              <div className="py-12 space-y-6">
+                <div className="flex justify-between items-center mb-6">
+                  <span className="text-sm font-medium text-surface-400 bg-surface-800/30 px-3 py-1.5 rounded-lg">
+                    {currentQuestion.scaleConfig.minLabel}
+                  </span>
+                  <span className="text-sm font-medium text-surface-400 bg-surface-800/30 px-3 py-1.5 rounded-lg">
+                    {currentQuestion.scaleConfig.maxLabel}
+                  </span>
                 </div>
-                <div className="flex justify-center space-x-4">
+                <div className="flex justify-center items-center space-x-3">
                   {Array.from({ length: currentQuestion.scaleConfig.max - currentQuestion.scaleConfig.min + 1 }, (_, i) => {
                     const value = currentQuestion.scaleConfig!.min + i;
                     return (
                       <button
                         key={value}
                         onClick={() => handleAnswerSelect(value)}
-                        className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300 hover:scale-110 ${
+                        className={`w-14 h-14 rounded-full border-2 flex items-center justify-center font-semibold transition-all duration-300 hover:scale-110 ${
                           selectedAnswer === value
-                            ? 'border-neon-magenta bg-neon-magenta text-warm-off-white'
-                            : 'border-neutral-gray text-neutral-gray hover:border-neon-magenta/50 hover:text-warm-off-white'
+                            ? 'border-primary-400 bg-primary-500 text-white shadow-glow-primary'
+                            : 'border-surface-500 text-surface-400 hover:border-primary-400 hover:text-white hover:bg-primary-500/20'
                         }`}
                       >
                         {value}
                       </button>
                     );
                   })}
+                </div>
+                <div className="text-center text-sm text-surface-500">
+                  Select a value from {currentQuestion.scaleConfig.min} to {currentQuestion.scaleConfig.max}
                 </div>
               </div>
             )}
@@ -338,83 +457,126 @@ export function TestEngine({ onComplete, showPreview = false }: TestEngineProps)
               <button
                 key={option.id}
                 onClick={() => handleAnswerSelect(option.id)}
-                className={`w-full p-6 rounded-2xl border-2 text-center transition-all duration-300 hover:scale-[1.02] ${
-                  selectedAnswer === option.id
-                    ? 'border-neon-magenta bg-neon-magenta/10 shadow-lg shadow-neon-magenta/20'
-                    : 'border-neutral-gray/30 bg-layered-charcoal/50 hover:border-neon-magenta/50'
-                }`}
+                className={`quiz-option w-full text-center relative overflow-hidden ${selectedAnswer === option.id ? 'selected' : ''}`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="text-warm-off-white text-lg mb-2">{option.text}</div>
-                {option.description && (
-                  <div className="text-neutral-gray text-sm">{option.description}</div>
+                <div className="space-y-3">
+                  <div className={`text-xl font-semibold transition-colors duration-300 ${
+                    selectedAnswer === option.id 
+                      ? 'text-white' 
+                      : 'text-surface-200 group-hover:text-white'
+                  }`}>
+                    {option.text}
+                  </div>
+                  {option.description && (
+                    <div className={`text-base transition-colors duration-300 ${
+                      selectedAnswer === option.id 
+                        ? 'text-surface-300' 
+                        : 'text-surface-400 group-hover:text-surface-300'
+                    }`}>
+                      {option.description}
+                    </div>
+                  )}
+                  {selectedAnswer === option.id && (
+                    <div className="flex justify-center">
+                      <CheckCircle className="w-6 h-6 text-primary-400 animate-scale-in" />
+                    </div>
+                  )}
+                </div>
+                {selectedAnswer === option.id && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/8 via-primary-600/5 to-accent-500/3 -z-10 rounded-2xl"></div>
                 )}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 -z-10 rounded-2xl"></div>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Navigation */}
-        <div className="flex justify-between items-center">
+        {/* Enhanced Navigation */}
+        <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 mt-12">
           <button
             onClick={handlePrevious}
             disabled={currentQuestionIndex === 0}
-            className={`flex items-center space-x-2 px-6 py-3 rounded-full transition-all duration-300 ${
+            className={`btn-ghost flex items-center space-x-3 ${
               currentQuestionIndex === 0
-                ? 'text-neutral-gray/50 cursor-not-allowed'
-                : 'text-warm-off-white hover:text-neon-magenta hover:bg-neon-magenta/10'
+                ? 'opacity-50 cursor-not-allowed'
+                : 'hover:-translate-x-1'
             }`}
           >
             <ArrowLeft className="w-5 h-5" />
-            <span>Previous</span>
+            <span>Previous Question</span>
           </button>
 
           <div className="flex items-center space-x-4">
             <button
               onClick={saveProgress}
-              className="px-4 py-2 text-sm text-neutral-gray hover:text-warm-off-white transition-colors"
+              className="btn-ghost text-sm px-4 py-2 flex items-center space-x-2"
             >
-              Save Progress
+              <Save className="w-4 h-4" />
+              <span>Save Progress</span>
             </button>
             
             <button
               onClick={handleNext}
               disabled={!selectedAnswer || isLoading}
-              className={`flex items-center space-x-2 px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 ${
+              className={`btn-primary relative overflow-hidden ${
                 !selectedAnswer || isLoading
-                  ? 'bg-neutral-gray/20 text-neutral-gray cursor-not-allowed'
-                  : 'bg-gradient-to-r from-neon-magenta to-matte-gold text-warm-off-white hover:shadow-lg hover:shadow-neon-magenta/20 hover:scale-105'
+                  ? 'opacity-50 cursor-not-allowed hover:scale-100 hover:shadow-none hover:-translate-y-0'
+                  : 'hover:shadow-glow-primary-lg transform hover:scale-105'
               }`}
             >
-              <span>
-                {isLoading 
-                  ? 'Processing...' 
-                  : isLastQuestion 
-                    ? 'Complete Test' 
-                    : 'Next Question'
-                }
+              <span className="relative z-10 flex items-center space-x-3">
+                <span className="text-lg font-medium">
+                  {isLoading 
+                    ? 'Processing...' 
+                    : isLastQuestion 
+                      ? 'Complete Analysis' 
+                      : 'Continue'
+                  }
+                </span>
+                {isLoading ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                ) : isLastQuestion ? (
+                  <Zap className="w-5 h-5 animate-pulse" />
+                ) : (
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                )}
               </span>
-              {isLoading ? (
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-warm-off-white"></div>
-              ) : (
-                <ArrowRight className="w-5 h-5" />
+              {!(!selectedAnswer || isLoading) && (
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500 opacity-0 hover:opacity-100 transition-opacity duration-300 -z-10"></div>
               )}
             </button>
           </div>
         </div>
 
-        {/* Help Text */}
-        <div className="text-center mt-8 max-w-2xl mx-auto">
-          <p className="text-sm text-neutral-gray leading-relaxed">
-            Your responses are completely anonymous and encrypted. Answer honestly for the most accurate analysis. 
-            You can save your progress and return anytime.
-          </p>
-          <div className="flex items-center justify-center space-x-6 mt-4 text-xs text-neutral-gray">
-            <span>🔒 100% Anonymous</span>
-            <span>💾 Auto-saved</span>
-            <span>🧠 AI-Powered Analysis</span>
+        {/* Enhanced Help Section */}
+        <div className="text-center mt-16 max-w-3xl mx-auto space-y-6">
+          <div className="bg-surface-800/20 backdrop-blur-sm rounded-2xl p-6 border border-surface-700/30">
+            <p className="text-surface-300 leading-relaxed mb-4">
+              Your responses are <span className="text-primary-300 font-medium">completely anonymous</span> and encrypted. 
+              Answer honestly for the most accurate analysis. You can save your progress and return anytime.
+            </p>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+              <div className="flex items-center justify-center space-x-2 bg-surface-800/30 rounded-lg px-4 py-3">
+                <Shield className="w-4 h-4 text-success" />
+                <span className="text-sm font-medium text-surface-300">100% Anonymous</span>
+              </div>
+              <div className="flex items-center justify-center space-x-2 bg-surface-800/30 rounded-lg px-4 py-3">
+                <Save className="w-4 h-4 text-info" />
+                <span className="text-sm font-medium text-surface-300">Auto-saved</span>
+              </div>
+              <div className="flex items-center justify-center space-x-2 bg-surface-800/30 rounded-lg px-4 py-3">
+                <Brain className="w-4 h-4 text-primary-400" />
+                <span className="text-sm font-medium text-surface-300">AI-Powered</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+// Default export for compatibility
+export default TestEngine;

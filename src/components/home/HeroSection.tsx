@@ -1,184 +1,303 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Play, Users, Shield, Brain } from 'lucide-react';
+import { ArrowRight, Sparkles, Play, Users, Shield, Brain, Zap, Star, Award } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 const floatingElements = [
-  { id: 1, x: '10%', y: '20%', delay: 0 },
-  { id: 2, x: '85%', y: '15%', delay: 1000 },
-  { id: 3, x: '15%', y: '70%', delay: 2000 },
-  { id: 4, x: '80%', y: '75%', delay: 1500 },
+  { id: 1, icon: Zap, x: '10%', y: '20%', delay: 0, color: 'text-primary-400' },
+  { id: 2, icon: Star, x: '85%', y: '15%', delay: 1000, color: 'text-accent-400' },
+  { id: 3, icon: Award, x: '15%', y: '70%', delay: 2000, color: 'text-primary-300' },
+  { id: 4, icon: Sparkles, x: '80%', y: '75%', delay: 1500, color: 'text-accent-300' },
+];
+
+const trustStats = [
+  { value: '50,000+', label: 'Trusted Users', icon: Users },
+  { value: '96%', label: 'Accuracy Rate', icon: Award },
+  { value: '15 min', label: 'Complete Test', icon: Zap },
 ];
 
 export function HeroSection() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      setMousePosition({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
     };
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  if (!mounted) return null;
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Dynamic background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-warm-charcoal via-layered-charcoal to-warm-charcoal" />
-      
-      {/* Interactive ambient light effects */}
-      <div 
-        className="absolute w-96 h-96 bg-neon-magenta/10 rounded-full blur-3xl transition-all duration-1000 ease-out"
-        style={{
-          left: `${20 + mousePosition.x * 0.02}%`,
-          top: `${25 + mousePosition.y * 0.02}%`,
-        }}
-      />
-      <div 
-        className="absolute w-96 h-96 bg-matte-gold/5 rounded-full blur-3xl transition-all duration-1000 ease-out"
-        style={{
-          right: `${25 + mousePosition.x * 0.015}%`,
-          bottom: `${25 + mousePosition.y * 0.015}%`,
-        }}
-      />
-      
-      {/* Floating decorative elements */}
-      {floatingElements.map((element) => (
-        <div
-          key={element.id}
-          className="absolute w-2 h-2 bg-neon-magenta/30 rounded-full animate-pulse"
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900">
+      {/* Enhanced dynamic background effects */}
+      <div className="absolute inset-0">
+        {/* Base gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-surface-900/50 to-transparent" />
+        
+        {/* Interactive ambient light effects */}
+        <div 
+          className="absolute w-96 h-96 bg-primary-500/20 rounded-full blur-3xl transition-all duration-1000 ease-out animate-pulse-glow"
           style={{
-            left: element.x,
-            top: element.y,
-            animationDelay: `${element.delay}ms`,
-            animationDuration: '3s',
+            left: `${15 + mousePosition.x * 30}%`,
+            top: `${20 + mousePosition.y * 20}%`,
+            transform: `translate(-50%, -50%) scale(${1 + mousePosition.x * 0.2})`,
           }}
         />
-      ))}
+        <div 
+          className="absolute w-80 h-80 bg-accent-500/15 rounded-full blur-3xl transition-all duration-1500 ease-out"
+          style={{
+            right: `${20 + mousePosition.x * 25}%`,
+            bottom: `${25 + mousePosition.y * 25}%`,
+            transform: `translate(50%, 50%) scale(${1 + mousePosition.y * 0.3})`,
+          }}
+        />
+        
+        {/* Additional atmospheric elements */}
+        <div className="absolute top-1/4 left-1/3 w-64 h-64 bg-primary-600/10 rounded-full blur-2xl animate-float" />
+        <div className="absolute bottom-1/3 right-1/4 w-48 h-48 bg-accent-600/10 rounded-full blur-2xl animate-float-delayed" />
+      </div>
       
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      {/* Enhanced floating decorative elements */}
+      {floatingElements.map((element) => {
+        const IconComponent = element.icon;
+        return (
+          <div
+            key={element.id}
+            className={`absolute transition-all duration-700 ease-out hover:scale-125 ${element.color} opacity-60 hover:opacity-100`}
+            style={{
+              left: element.x,
+              top: element.y,
+              animationDelay: `${element.delay}ms`,
+              transform: `translate(-50%, -50%) rotate(${mousePosition.x * 360}deg)`,
+            }}
+          >
+            <IconComponent 
+              size={24} 
+              className="animate-pulse drop-shadow-lg" 
+              style={{
+                animationDuration: `${3 + Math.random() * 2}s`,
+                filter: 'drop-shadow(0 0 8px currentColor)',
+              }}
+            />
+          </div>
+        );
+      })}
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left column - Main content */}
-          <div className="text-center lg:text-left">
-            {/* Badge */}
-            <div className="inline-flex items-center space-x-2 bg-layered-charcoal/50 backdrop-blur-sm border border-neutral-gray/20 rounded-pill px-4 py-2 mb-6 fade-in">
-              <Sparkles className="w-4 h-4 text-neon-magenta" />
-              <span className="text-sm text-neutral-gray">AI-Powered Deep Psychological Analysis</span>
+          <div className="text-center lg:text-left space-y-8">
+            {/* Enhanced Badge */}
+            <div className="inline-flex items-center space-x-3 bg-surface-800/40 backdrop-blur-lg border border-primary-500/20 rounded-2xl px-6 py-3 mb-2 fade-in group hover:border-primary-500/40 transition-all duration-300">
+              <div className="relative">
+                <Sparkles className="w-5 h-5 text-primary-400 animate-pulse" />
+                <div className="absolute inset-0 w-5 h-5 text-primary-400 animate-ping opacity-30"></div>
+              </div>
+              <span className="text-sm font-medium text-surface-200 tracking-wide">AI-Powered Psychological Analysis</span>
+              <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
             </div>
             
-            {/* Main heading */}
-            <h1 className="font-playfair text-3xl sm:text-4xl lg:text-5xl xl:text-6xl text-warm-off-white mb-6 fade-in leading-tight" style={{ animationDelay: '200ms' }}>
-              Discover Your
-              <span className="text-neon-magenta block lg:inline"> Inner Desires</span>
-            </h1>
+            {/* Enhanced Main heading */}
+            <div className="space-y-2">
+              <h1 className="font-playfair text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-white mb-4 fade-in leading-tight" style={{ animationDelay: '200ms' }}>
+                Discover Your
+                <span className="block bg-gradient-to-r from-primary-400 via-primary-300 to-accent-400 bg-clip-text text-transparent animate-shimmer bg-300% leading-tight">
+                  Inner Universe
+                </span>
+              </h1>
+              <div className="w-24 h-1 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full mx-auto lg:mx-0 fade-in" style={{ animationDelay: '300ms' }}></div>
+            </div>
             
-            {/* Subtitle */}
-            <p className="text-lg sm:text-xl text-neutral-gray mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed fade-in" style={{ animationDelay: '400ms' }}>
-              Explore your authentic self in a private, secure space. Our AI analyst provides deep personalized insights to help you understand your innermost desires.
+            {/* Enhanced Subtitle */}
+            <p className="text-xl sm:text-2xl text-surface-300 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed fade-in font-light" style={{ animationDelay: '400ms' }}>
+              Embark on a journey of self-discovery with our{' '}
+              <span className="text-primary-300 font-medium">scientifically-validated</span>{' '}
+              personality analysis. Understand your deepest desires in a{' '}
+              <span className="text-accent-300 font-medium">completely private</span> environment.
             </p>
             
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-8 fade-in" style={{ animationDelay: '600ms' }}>
-              <Link href="/test" className="btn-primary group inline-flex items-center justify-center whitespace-nowrap text-lg px-8 py-4">
-                Start Your Journey
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
+            {/* Enhanced CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-12 fade-in" style={{ animationDelay: '600ms' }}>
+              <Link href="/test" className="btn-primary group inline-flex items-center justify-center text-lg px-10 py-4 text-white shadow-2xl hover:shadow-glow-primary-lg transform hover:scale-105">
+                <span className="mr-3">Start Your Journey</span>
+                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-all duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-400 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
               </Link>
-              <button className="btn-secondary inline-flex items-center justify-center whitespace-nowrap group">
-                <Play className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-200" />
-                Watch Introduction
+              <button className="btn-secondary group inline-flex items-center justify-center text-lg px-8 py-4">
+                <Play className="w-5 h-5 mr-3 group-hover:scale-125 transition-all duration-300" />
+                <span>Watch Demo</span>
               </button>
             </div>
             
-            {/* Trust indicators */}
-            <div className="flex flex-wrap justify-center lg:justify-start gap-6 text-sm text-neutral-gray fade-in" style={{ animationDelay: '800ms' }}>
-              <div className="flex items-center space-x-2">
-                <Shield className="w-4 h-4 text-neon-magenta" />
-                <span>Completely Anonymous</span>
+            {/* Enhanced Trust indicators with stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 fade-in" style={{ animationDelay: '800ms' }}>
+              {trustStats.map((stat, index) => {
+                const IconComponent = stat.icon;
+                return (
+                  <div key={index} className="stat-card group">
+                    <div className="flex items-center justify-center space-x-2 mb-1">
+                      <IconComponent className="w-4 h-4 text-primary-400 group-hover:text-primary-300 transition-colors duration-300" />
+                      <div className="stat-value text-lg">{stat.value}</div>
+                    </div>
+                    <div className="stat-label">{stat.label}</div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Privacy & Security badges */}
+            <div className="flex flex-wrap justify-center lg:justify-start gap-4 fade-in" style={{ animationDelay: '1000ms' }}>
+              <div className="flex items-center space-x-2 bg-surface-800/20 backdrop-blur-sm rounded-lg px-3 py-2 border border-surface-700/30">
+                <Shield className="w-4 h-4 text-success" />
+                <span className="text-sm text-surface-300">100% Anonymous</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Brain className="w-4 h-4 text-neon-magenta" />
-                <span>Scientifically Validated</span>
+              <div className="flex items-center space-x-2 bg-surface-800/20 backdrop-blur-sm rounded-lg px-3 py-2 border border-surface-700/30">
+                <Brain className="w-4 h-4 text-primary-400" />
+                <span className="text-sm text-surface-300">Science-Based</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Users className="w-4 h-4 text-neon-magenta" />
-                <span>Professional Analysis</span>
+              <div className="flex items-center space-x-2 bg-surface-800/20 backdrop-blur-sm rounded-lg px-3 py-2 border border-surface-700/30">
+                <Award className="w-4 h-4 text-accent-400" />
+                <span className="text-sm text-surface-300">Expert Validated</span>
               </div>
             </div>
           </div>
           
-          {/* Right column - Interactive preview */}
-          <div className="relative fade-in" style={{ animationDelay: '1000ms' }}>
-            <div className="relative bg-layered-charcoal/30 backdrop-blur-sm border border-neutral-gray/20 rounded-2xl p-6 sm:p-8">
+          {/* Right column - Enhanced Interactive preview */}
+          <div className="relative fade-in lg:pl-8" style={{ animationDelay: '1000ms' }}>
+            {/* Main preview card */}
+            <div className="card-modern relative overflow-hidden group">
+              {/* Ambient glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-accent-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
               {/* Mock test preview */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-warm-off-white">Test Preview</h3>
-                  <div className="text-sm text-neutral-gray">Question 1/25</div>
+              <div className="relative space-y-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
+                    <h3 className="text-xl font-semibold text-white">Live Test Preview</h3>
+                  </div>
+                  <div className="bg-surface-700/50 rounded-lg px-3 py-1">
+                    <div className="text-sm text-surface-300">Question 1/80</div>
+                  </div>
                 </div>
                 
-                <div className="space-y-4">
-                  <p className="text-warm-off-white leading-relaxed">
-                    In intimate relationships, you tend to:
-                  </p>
+                {/* Question section */}
+                <div className="space-y-5">
+                  <div className="relative">
+                    <p className="text-lg text-surface-200 leading-relaxed mb-1">
+                      In intimate relationships, you tend to:
+                    </p>
+                    <div className="text-sm text-surface-400 italic">
+                      Choose the response that feels most authentic to you
+                    </div>
+                  </div>
                   
+                  {/* Enhanced answer options */}
                   <div className="space-y-3">
                     {[
-                      'Lead and guide your partner',
-                      'Follow your partner\'s lead',
-                      'Share control equally',
-                      'Adapt flexibly to the situation'
+                      { text: 'Lead and guide your partner', selected: true },
+                      { text: 'Follow your partner\'s lead', selected: false },
+                      { text: 'Share control equally', selected: false },
+                      { text: 'Adapt flexibly to the situation', selected: false }
                     ].map((option, index) => (
                       <div
                         key={index}
-                        className="quiz-option group cursor-pointer"
+                        className={`quiz-option group cursor-pointer relative overflow-hidden ${option.selected ? 'selected' : ''}`}
                       >
-                        <div className="flex items-center space-x-3">
-                          <div className="w-4 h-4 border-2 border-neutral-gray rounded-full group-hover:border-neon-magenta transition-colors duration-200" />
-                          <span className="text-neutral-gray group-hover:text-warm-off-white transition-colors duration-200">
-                            {option}
+                        <div className="flex items-center space-x-4">
+                          <div className={`relative flex-shrink-0 w-5 h-5 rounded-full border-2 transition-all duration-300 ${
+                            option.selected 
+                              ? 'border-primary-400 bg-primary-400/20' 
+                              : 'border-surface-500 group-hover:border-primary-400'
+                          }`}>
+                            {option.selected && (
+                              <div className="absolute inset-1 bg-primary-400 rounded-full animate-scale-in"></div>
+                            )}
+                          </div>
+                          <span className={`transition-colors duration-300 ${
+                            option.selected 
+                              ? 'text-white font-medium' 
+                              : 'text-surface-300 group-hover:text-white'
+                          }`}>
+                            {option.text}
                           </span>
                         </div>
+                        {option.selected && (
+                          <div className="absolute inset-0 bg-primary-500/5 -z-10"></div>
+                        )}
                       </div>
                     ))}
                   </div>
                 </div>
                 
-                <div className="pt-4 border-t border-neutral-gray/20">
-                  <div className="w-full bg-layered-charcoal rounded-full h-2">
-                    <div className="bg-neon-magenta h-2 rounded-full w-1/4 transition-all duration-300"></div>
+                {/* Enhanced progress section */}
+                <div className="pt-6 border-t border-surface-700/50 space-y-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-surface-400">Test Progress</span>
+                    <span className="text-primary-400 font-medium">1.25%</span>
                   </div>
-                  <p className="text-xs text-neutral-gray mt-2">Progress: 4%</p>
+                  <div className="progress-bar">
+                    <div className="progress-fill w-1/80 shadow-glow-primary"></div>
+                  </div>
+                  <div className="flex items-center justify-between text-xs text-surface-500">
+                    <span>~14 minutes remaining</span>
+                    <span className="flex items-center space-x-1">
+                      <div className="w-1.5 h-1.5 bg-primary-400 rounded-full animate-pulse"></div>
+                      <span>Auto-saved</span>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
             
-            {/* Floating stats */}
-            <div className="absolute -top-4 -right-4 bg-neon-magenta/10 backdrop-blur-sm border border-neon-magenta/20 rounded-lg p-3">
-              <div className="text-center">
-                <div className="text-lg font-bold text-neon-magenta">15 min</div>
-                <div className="text-xs text-neutral-gray">Complete Test</div>
+            {/* Enhanced floating stats */}
+            <div className="absolute -top-6 -right-6 stat-card bg-primary-500/10 border-primary-500/30 backdrop-blur-lg animate-float">
+              <div className="flex items-center space-x-2 mb-1">
+                <Zap className="w-4 h-4 text-primary-400" />
+                <div className="stat-value">15 min</div>
               </div>
+              <div className="stat-label">Average Time</div>
             </div>
             
-            <div className="absolute -bottom-4 -left-4 bg-matte-gold/10 backdrop-blur-sm border border-matte-gold/20 rounded-lg p-3">
-              <div className="text-center">
-                <div className="text-lg font-bold text-matte-gold">10,000+</div>
-                <div className="text-xs text-neutral-gray">Trusted Users</div>
+            <div className="absolute -bottom-6 -left-6 stat-card bg-accent-500/10 border-accent-500/30 backdrop-blur-lg animate-float-delayed">
+              <div className="flex items-center space-x-2 mb-1">
+                <Users className="w-4 h-4 text-accent-400" />
+                <div className="text-xl font-bold text-accent-400">50K+</div>
               </div>
+              <div className="stat-label">Users Analyzed</div>
+            </div>
+
+            {/* Additional floating badge */}
+            <div className="absolute top-1/3 -left-8 bg-surface-800/80 backdrop-blur-sm rounded-full p-3 border border-success/30 animate-pulse hidden lg:block">
+              <Shield className="w-6 h-6 text-success" />
             </div>
           </div>
         </div>
       </div>
       
       {/* Enhanced scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-neutral-gray/30 rounded-full flex justify-center relative">
-          <div className="w-1 h-3 bg-gradient-to-b from-neon-magenta to-transparent rounded-full mt-2 animate-pulse" />
+      <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce fade-in" style={{ animationDelay: '2000ms' }}>
+        <div className="flex flex-col items-center space-y-3 group cursor-pointer hover:scale-110 transition-transform duration-300">
+          <div className="relative w-8 h-12 border-2 border-surface-500/50 rounded-full flex justify-center overflow-hidden group-hover:border-primary-400/70 transition-colors duration-300">
+            <div className="w-1 h-4 bg-gradient-to-b from-primary-400 via-primary-300 to-transparent rounded-full mt-2 animate-pulse group-hover:animate-bounce" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-1 h-1 bg-surface-500 rounded-full animate-pulse"></div>
+            <p className="text-xs text-surface-400 group-hover:text-surface-300 transition-colors duration-300 font-medium tracking-wide">Explore More</p>
+            <div className="w-1 h-1 bg-surface-500 rounded-full animate-pulse" style={{ animationDelay: '500ms' }}></div>
+          </div>
         </div>
-        <p className="text-xs text-neutral-gray/70 mt-2 text-center">Scroll down</p>
       </div>
     </section>
   );
 }
+
+// Default export for compatibility
+export default HeroSection;
