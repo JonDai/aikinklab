@@ -234,8 +234,15 @@ export function TestEngine({ onComplete, showPreview = false }: TestEngineProps)
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900 py-8 md:py-16">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900 py-8 md:py-16 mobile-container">
+      {/* Enhanced Aurora background effects for test environment */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-primary-500/8 rounded-full blur-3xl animate-pulse-soft" />
+        <div className="absolute bottom-1/4 right-1/3 w-64 h-64 bg-accent-500/6 rounded-full blur-2xl animate-float" />
+        <div className="absolute top-2/3 left-1/2 w-48 h-48 bg-secondary-500/5 rounded-full blur-2xl animate-float-delayed" />
+      </div>
+      
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Enhanced Header with Progress */}
         <div className="mb-12">
           {/* Top status bar */}
@@ -269,15 +276,15 @@ export function TestEngine({ onComplete, showPreview = false }: TestEngineProps)
             </div>
           </div>
           
-          {/* Enhanced Progress Bar with Modern Styling */}
+          {/* Enhanced Aurora Progress Bar with Modern Styling */}
           <div className="space-y-4 mb-8">
-            <div className="progress-modern bg-surface-800/50 backdrop-blur-sm shadow-inner">
+            <div className="progress-modern bg-surface-800/50 backdrop-blur-sm shadow-inner border border-surface-700/20">
               <div 
-                className="progress-fill bg-gradient-to-r from-primary-500 via-primary-400 to-accent-400 shadow-glow-primary relative overflow-hidden transition-all duration-1000 ease-out"
+                className="progress-fill bg-gradient-to-r from-primary-500 via-secondary-500 via-accent-500 to-primary-400 shadow-glow-aurora relative overflow-hidden transition-all duration-1000 ease-out"
                 style={{ width: `${progress}%` }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"></div>
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-primary-600/20 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 via-secondary-300/20 to-transparent animate-shimmer bg-300%"></div>
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-primary-600/15 via-secondary-600/10 to-transparent"></div>
               </div>
             </div>
             
@@ -333,11 +340,12 @@ export function TestEngine({ onComplete, showPreview = false }: TestEngineProps)
           </div>
         </div>
 
-        {/* Enhanced Question Card with Modern Glassmorphism */}
-        <div className="card-glass-intense relative group mb-10 overflow-hidden animate-fade-in-up">
-          {/* Enhanced ambient glow effects */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/8 via-transparent to-accent-500/6 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
-          <div className="absolute top-0 left-1/4 w-1/2 h-px bg-gradient-to-r from-transparent via-primary-400/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        {/* Enhanced Aurora Question Card with Modern Glassmorphism */}
+        <div className="aurora-card relative group mb-10 overflow-hidden animate-fade-in-up mobile-touch-feedback">
+          {/* Enhanced Aurora ambient glow effects */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-secondary-500/5 via-accent-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
+          <div className="absolute top-0 left-1/4 w-1/2 h-px bg-gradient-to-r from-transparent via-primary-400/40 via-secondary-400/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute bottom-0 right-1/4 w-1/2 h-px bg-gradient-to-r from-transparent via-accent-400/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           
           {/* Enhanced Question Header */}
           <div className="relative text-center mb-12">
@@ -375,7 +383,7 @@ export function TestEngine({ onComplete, showPreview = false }: TestEngineProps)
               <button
                 key={option.id}
                 onClick={() => handleAnswerSelect(option.id)}
-                className={`quiz-option-enhanced w-full text-left relative overflow-hidden transition-all duration-400 ease-out-back hover:scale-[1.02] ${selectedAnswer === option.id ? 'selected' : ''} animate-fade-in-up`}
+                className={`quiz-option-enhanced mobile-touch-feedback w-full text-left relative overflow-hidden transition-all duration-400 ease-out-back hover:scale-[1.02] md:hover:scale-[1.02] active:scale-[0.98] ${selectedAnswer === option.id ? 'selected' : ''} animate-fade-in-up touch-target`}
                 style={{ animationDelay: `${(index * 100) + 600}ms` }}
               >
                 <div className="flex items-start space-x-5">
@@ -413,9 +421,9 @@ export function TestEngine({ onComplete, showPreview = false }: TestEngineProps)
                   )}
                 </div>
                 {selectedAnswer === option.id && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/8 via-primary-600/5 to-accent-500/3 -z-10 rounded-2xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/12 via-secondary-500/6 via-accent-500/8 to-primary-500/5 -z-10 rounded-2xl shadow-glow-inset border border-primary-500/10"></div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 -z-10 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-500/8 via-secondary-500/4 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 -z-10 rounded-2xl"></div>
               </button>
             ))}
 
@@ -484,9 +492,9 @@ export function TestEngine({ onComplete, showPreview = false }: TestEngineProps)
                   )}
                 </div>
                 {selectedAnswer === option.id && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/8 via-primary-600/5 to-accent-500/3 -z-10 rounded-2xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/12 via-secondary-500/6 via-accent-500/8 to-primary-500/5 -z-10 rounded-2xl shadow-glow-inset border border-primary-500/10"></div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 -z-10 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-500/8 via-secondary-500/4 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 -z-10 rounded-2xl"></div>
               </button>
             ))}
           </div>

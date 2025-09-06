@@ -135,9 +135,9 @@ const nextConfig = {
     serverComponentsExternalPackages: ['web-vitals'],
     // Enable turbo mode for faster builds
     turbo: {
-      loaders: {
+      rules: {
         // Optimize SVG loading
-        '.svg': ['@svgr/webpack'],
+        '*.svg': ['@svgr/webpack'],
       },
     },
   },

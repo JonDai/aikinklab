@@ -35,14 +35,14 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900">
-      {/* Enhanced dynamic background effects */}
+      {/* Enhanced Aurora dynamic background effects */}
       <div className="absolute inset-0">
-        {/* Base gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-surface-900/50 to-transparent" />
+        {/* Enhanced base gradient overlay with Aurora colors */}
+        <div className="absolute inset-0 bg-gradient-to-br from-surface-900/60 via-primary-500/5 to-accent-500/3" />
         
-        {/* Interactive ambient light effects */}
+        {/* Enhanced interactive Aurora ambient light effects */}
         <div 
-          className="absolute w-96 h-96 bg-primary-500/20 rounded-full blur-3xl transition-all duration-1000 ease-out animate-pulse-glow"
+          className="absolute w-96 h-96 bg-gradient-radial from-primary-500/30 via-primary-500/15 to-transparent rounded-full blur-3xl transition-all duration-1000 ease-out aurora-glow"
           style={{
             left: `${15 + mousePosition.x * 30}%`,
             top: `${20 + mousePosition.y * 20}%`,
@@ -50,17 +50,26 @@ export function HeroSection() {
           }}
         />
         <div 
-          className="absolute w-80 h-80 bg-accent-500/15 rounded-full blur-3xl transition-all duration-1500 ease-out"
+          className="absolute w-80 h-80 bg-gradient-radial from-accent-500/25 via-accent-500/12 to-transparent rounded-full blur-3xl transition-all duration-1500 ease-out"
           style={{
             right: `${20 + mousePosition.x * 25}%`,
             bottom: `${25 + mousePosition.y * 25}%`,
             transform: `translate(50%, 50%) scale(${1 + mousePosition.y * 0.3})`,
           }}
         />
+        <div 
+          className="absolute w-72 h-72 bg-gradient-radial from-secondary-500/15 via-secondary-500/8 to-transparent rounded-full blur-3xl transition-all duration-2000 ease-out animate-pulse-soft"
+          style={{
+            left: `${60 + mousePosition.y * 20}%`,
+            top: `${60 + mousePosition.x * 15}%`,
+            transform: `translate(-50%, -50%) scale(${1 + mousePosition.y * 0.25})`,
+          }}
+        />
         
-        {/* Additional atmospheric elements */}
-        <div className="absolute top-1/4 left-1/3 w-64 h-64 bg-primary-600/10 rounded-full blur-2xl animate-float" />
-        <div className="absolute bottom-1/3 right-1/4 w-48 h-48 bg-accent-600/10 rounded-full blur-2xl animate-float-delayed" />
+        {/* Enhanced additional Aurora atmospheric elements */}
+        <div className="absolute top-1/4 left-1/3 w-64 h-64 bg-gradient-radial from-primary-600/15 via-primary-600/8 to-transparent rounded-full blur-2xl animate-float" />
+        <div className="absolute bottom-1/3 right-1/4 w-48 h-48 bg-gradient-radial from-accent-600/12 via-accent-600/6 to-transparent rounded-full blur-2xl animate-float-delayed" />
+        <div className="absolute top-1/2 left-1/6 w-56 h-56 bg-gradient-radial from-secondary-600/10 via-secondary-600/5 to-transparent rounded-full blur-2xl animate-float-subtle" />
       </div>
       
       {/* Enhanced floating decorative elements */}
@@ -103,15 +112,15 @@ export function HeroSection() {
               <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
             </div>
             
-            {/* Enhanced Main heading */}
+            {/* Enhanced Main heading with Aurora gradient */}
             <div className="space-y-2">
               <h1 className="font-playfair text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-white mb-4 fade-in leading-tight" style={{ animationDelay: '200ms' }}>
                 Discover Your
-                <span className="block bg-gradient-to-r from-primary-400 via-primary-300 to-accent-400 bg-clip-text text-transparent animate-shimmer bg-300% leading-tight">
-                  Inner Universe
+                <span className="block bg-gradient-to-r from-primary-400 via-secondary-400 via-accent-400 to-primary-300 bg-clip-text text-transparent animate-shimmer bg-300% leading-tight drop-shadow-[0_0_20px_rgba(155,127,255,0.3)]">
+                  Intimate Universe
                 </span>
               </h1>
-              <div className="w-24 h-1 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full mx-auto lg:mx-0 fade-in" style={{ animationDelay: '300ms' }}></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 rounded-full mx-auto lg:mx-0 fade-in animate-shimmer bg-200%" style={{ animationDelay: '300ms' }}></div>
             </div>
             
             {/* Enhanced Subtitle */}
@@ -122,16 +131,16 @@ export function HeroSection() {
               <span className="text-accent-300 font-medium">completely private</span> environment.
             </p>
             
-            {/* Enhanced CTA Buttons */}
+            {/* Enhanced Aurora CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-12 fade-in" style={{ animationDelay: '600ms' }}>
-              <Link href="/test" className="btn-primary group inline-flex items-center justify-center text-lg px-10 py-4 text-white shadow-2xl hover:shadow-glow-primary-lg transform hover:scale-105">
-                <span className="mr-3">Start Your Journey</span>
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-all duration-300" />
-                <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-400 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+              <Link href="/test" className="aurora-button group inline-flex items-center justify-center text-lg px-10 py-4 text-white shadow-glow-primary-lg transform hover:scale-105 relative overflow-hidden">
+                <span className="relative z-10 mr-3 font-medium">Start Your Journey</span>
+                <ArrowRight className="relative z-10 w-6 h-6 group-hover:translate-x-2 transition-all duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-600 via-secondary-600 to-accent-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer bg-200%"></div>
               </Link>
-              <button className="btn-secondary group inline-flex items-center justify-center text-lg px-8 py-4">
-                <Play className="w-5 h-5 mr-3 group-hover:scale-125 transition-all duration-300" />
-                <span>Watch Demo</span>
+              <button className="btn-glass group inline-flex items-center justify-center text-lg px-8 py-4 hover:shadow-glow-accent">
+                <Play className="w-5 h-5 mr-3 group-hover:scale-125 transition-all duration-300 text-accent-400" />
+                <span className="text-surface-200 group-hover:text-white transition-colors">Watch Demo</span>
               </button>
             </div>
             

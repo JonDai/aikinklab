@@ -9,59 +9,86 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Enhanced Midnight Radio Color Palette
+        // Intimate Aurora Color System - designed for 18-35 target audience
         primary: {
-          50: '#fdf2ff',
-          100: '#fae8ff', 
-          200: '#f5d0fe',
-          300: '#f0abfc',
-          400: '#e879f9',
-          500: '#D946EF', // neon-magenta
-          600: '#c026d3',
-          700: '#a21caf',
-          800: '#86198f',
-          900: '#701a75',
-          950: '#4a044e',
+          50: '#faf8ff',
+          100: '#f3f0ff',
+          200: '#e9e5ff', 
+          300: '#d6cdff',
+          400: '#b8a6ff',
+          500: '#9b7fff', // deep-violet (main brand color)
+          600: '#8b5cf6', 
+          700: '#7c3aed',
+          800: '#6d28d9',
+          900: '#5b21b6',
+          950: '#3f1695',
+        },
+        secondary: {
+          50: '#fff7f5',
+          100: '#ffede8',
+          200: '#ffdbd1',
+          300: '#ffc0ae',
+          400: '#ff9a7f',
+          500: '#ff6b47', // warm-coral (friendly accent)
+          600: '#f04e23',
+          700: '#dc2626',
+          800: '#b91c1c',
+          900: '#991b1b',
+          950: '#7f1d1d',
         },
         accent: {
-          50: '#fcf7e8',
-          100: '#f8f0c6',
-          200: '#f2e190',
-          300: '#ebce50',
-          400: '#e4b91f',
-          500: '#C0A062', // matte-gold
-          600: '#b8942b',
-          700: '#997a28',
-          800: '#7e6328',
-          900: '#6b5125',
-          950: '#3e2b11',
+          50: '#f0fdff',
+          100: '#ccfbff',
+          200: '#99f6ff',
+          300: '#4df2ff',
+          400: '#06e6ff',
+          500: '#00d4ff', // cyber-cyan (tech highlight)
+          600: '#0891b2',
+          700: '#0e7490',
+          800: '#155e75',
+          900: '#164e63',
+          950: '#083344',
         },
         surface: {
-          50: '#f8f8f8',
-          100: '#f0f0f0',
-          200: '#e4e4e4',
-          300: '#d1d1d1',
-          400: '#A3A3A3', // neutral-gray
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#2C2C2C', // layered-charcoal
-          900: '#1A1A1A', // warm-charcoal
-          950: '#0a0a0a',
+          50: '#fafafa',
+          100: '#f4f4f5',
+          200: '#e4e4e7',
+          300: '#d4d4d8',
+          400: '#a1a1aa', // neutral-gray (readable text)
+          500: '#71717a',
+          600: '#52525b',
+          700: '#3f3f46',
+          800: '#1e1b2e', // deep-space-blue (main background)
+          900: '#0f0b1a', // midnight-depth (darkest)
+          950: '#080510',
         },
-        // Legacy colors for backwards compatibility
-        'warm-charcoal': '#1A1A1A',
-        'layered-charcoal': '#2C2C2C',
-        'neon-magenta': '#D946EF',
-        'hover-magenta': '#E879F9',
-        'matte-gold': '#C0A062',
-        'warm-off-white': '#F5F5F5',
-        'neutral-gray': '#A3A3A3',
-        // Status colors
-        success: '#10b981',
-        warning: '#f59e0b',
-        error: '#ef4444',
-        info: '#3b82f6',
+        // Enhanced Legacy Support with New Names
+        'deep-violet': '#9b7fff',
+        'warm-coral': '#ff6b47',  
+        'cyber-cyan': '#00d4ff',
+        'deep-space-blue': '#1e1b2e',
+        'midnight-depth': '#0f0b1a',
+        'aurora-white': '#fafafa',
+        'soft-gray': '#a1a1aa',
+        // Legacy colors (maintaining compatibility)
+        'warm-charcoal': '#1e1b2e', // redirected to deep-space-blue
+        'layered-charcoal': '#3f3f46',
+        'neon-magenta': '#9b7fff', // redirected to deep-violet
+        'hover-magenta': '#b8a6ff',
+        'matte-gold': '#ff6b47', // redirected to warm-coral
+        'warm-off-white': '#fafafa',
+        'neutral-gray': '#a1a1aa',
+        // Enhanced Status Colors (more vibrant and modern)
+        success: '#16a34a', // enhanced green
+        warning: '#f59e0b', // warm amber
+        error: '#dc2626',   // clear red
+        info: '#0ea5e9',    // modern blue
+        // Special Effect Colors
+        glow: {
+          primary: 'rgba(155, 127, 255, 0.5)',
+          secondary: 'rgba(255, 107, 71, 0.5)',
+          accent: 'rgba(0, 212, 255, 0.5)',
+        },
       },
       fontFamily: {
         'playfair': ['Playfair Display', 'serif'],
@@ -147,21 +174,27 @@ const config: Config = {
         'lg': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
         'xl': '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
         '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
-        // Enhanced brand-specific glows
-        'glow-primary': '0 0 20px 5px rgba(217, 70, 239, 0.6)',
-        'glow-primary-lg': '0 0 40px 10px rgba(217, 70, 239, 0.4)',
-        'glow-primary-xl': '0 0 60px 15px rgba(217, 70, 239, 0.3)',
-        'glow-accent': '0 0 20px 5px rgba(192, 160, 98, 0.6)',
-        'glow-accent-lg': '0 0 30px 8px rgba(192, 160, 98, 0.4)',
-        'glow-inset': 'inset 0 0 15px 2px rgba(217, 70, 239, 0.5)',
-        'glow-inset-accent': 'inset 0 0 15px 2px rgba(192, 160, 98, 0.3)',
-        'glow-soft': '0 0 30px 8px rgba(217, 70, 239, 0.2), 0 0 60px 20px rgba(192, 160, 98, 0.1)',
+        // Enhanced Intimate Aurora Glow Effects
+        'glow-primary': '0 0 20px 5px rgba(155, 127, 255, 0.6)',
+        'glow-primary-lg': '0 0 40px 10px rgba(155, 127, 255, 0.4)',
+        'glow-primary-xl': '0 0 60px 15px rgba(155, 127, 255, 0.3)',
+        'glow-secondary': '0 0 20px 5px rgba(255, 107, 71, 0.6)',
+        'glow-secondary-lg': '0 0 30px 8px rgba(255, 107, 71, 0.4)',
+        'glow-accent': '0 0 20px 5px rgba(0, 212, 255, 0.6)',
+        'glow-accent-lg': '0 0 30px 8px rgba(0, 212, 255, 0.4)',
+        'glow-inset': 'inset 0 0 15px 2px rgba(155, 127, 255, 0.5)',
+        'glow-inset-secondary': 'inset 0 0 15px 2px rgba(255, 107, 71, 0.3)',
+        'glow-inset-accent': 'inset 0 0 15px 2px rgba(0, 212, 255, 0.3)',
+        'glow-soft': '0 0 30px 8px rgba(155, 127, 255, 0.2), 0 0 60px 20px rgba(255, 107, 71, 0.1)',
+        'glow-aurora': '0 0 40px 12px rgba(155, 127, 255, 0.3), 0 0 80px 25px rgba(0, 212, 255, 0.2)',
         // Glassmorphism shadows
         'glass-subtle': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
         'glass-prominent': '0 16px 40px 0 rgba(0, 0, 0, 0.45)',
         'glass-intense': '0 24px 48px 0 rgba(0, 0, 0, 0.55)',
         // Legacy
-        'glow': '0 0 20px 5px rgba(217, 70, 239, 0.6)',
+        'glow': '0 0 20px 5px rgba(155, 127, 255, 0.6)',
+        // Missing shadow definitions
+        'glow-aurora': '0 0 40px 12px rgba(155, 127, 255, 0.3), 0 0 80px 25px rgba(0, 212, 255, 0.2)',
       },
       transitionDuration: {
         '75': '75ms',

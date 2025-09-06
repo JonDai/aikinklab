@@ -89,9 +89,9 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
   };
 
   const getScoreBarColor = (score: number) => {
-    if (score >= 0.8) return 'bg-gradient-to-r from-primary-500 to-primary-400';
-    if (score >= 0.6) return 'bg-gradient-to-r from-accent-500 to-accent-400';
-    if (score >= 0.4) return 'bg-gradient-to-r from-white to-surface-200';
+    if (score >= 0.8) return 'bg-gradient-to-r from-primary-500 via-secondary-500 to-primary-400';
+    if (score >= 0.6) return 'bg-gradient-to-r from-accent-500 via-secondary-500 to-accent-400';
+    if (score >= 0.4) return 'bg-gradient-to-r from-primary-400 via-accent-400 to-primary-300';
     return 'bg-gradient-to-r from-surface-500 to-surface-400';
   };
 
@@ -108,8 +108,15 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900 py-12 md:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900 py-12 md:py-24 mobile-container">
+      {/* Enhanced Aurora background effects for results */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-radial from-primary-500/10 via-primary-500/5 to-transparent rounded-full blur-3xl animate-pulse-glow" />
+        <div className="absolute bottom-1/3 left-1/3 w-80 h-80 bg-gradient-radial from-secondary-500/8 via-secondary-500/4 to-transparent rounded-full blur-3xl animate-float" />
+        <div className="absolute top-1/2 left-1/6 w-72 h-72 bg-gradient-radial from-accent-500/6 via-accent-500/3 to-transparent rounded-full blur-2xl animate-float-delayed" />
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Enhanced Header Section */}
         <div className="text-center mb-16">
           <div className="relative mb-8">
@@ -127,7 +134,7 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
           <div className="space-y-6">
             <h1 className="font-playfair text-4xl sm:text-5xl md:text-6xl text-white mb-4 leading-tight">
               Your Personality
-              <span className="block bg-gradient-to-r from-primary-400 via-primary-300 to-accent-400 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-primary-400 via-secondary-400 via-accent-400 to-primary-300 bg-clip-text text-transparent animate-shimmer bg-300% drop-shadow-[0_0_20px_rgba(155,127,255,0.3)]">
                 Revealed
               </span>
             </h1>
@@ -149,11 +156,12 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
           </div>
         </div>
 
-        {/* Enhanced Main Result Card with Advanced Glassmorphism */}
-        <div className="card-glass-intense relative group mb-12 animate-scale-bounce">
-          {/* Enhanced ambient glow effects */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/12 via-transparent to-accent-500/8 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
-          <div className="absolute -top-px left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-primary-400/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        {/* Enhanced Aurora Main Result Card with Advanced Glassmorphism */}
+        <div className="aurora-card relative group mb-12 animate-scale-bounce mobile-touch-feedback">
+          {/* Enhanced Aurora ambient glow effects */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/15 via-secondary-500/8 via-accent-500/10 to-primary-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl shadow-glow-aurora"></div>
+          <div className="absolute -top-px left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-primary-400/50 via-secondary-400/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute -bottom-px right-1/4 left-1/4 h-px bg-gradient-to-r from-transparent via-accent-400/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           
           <div className="relative text-center space-y-8">
             {/* Main personality type display */}
@@ -261,11 +269,11 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
                   <div className="relative">
                     <div className="w-full bg-surface-800/50 rounded-full h-4 overflow-hidden backdrop-blur-sm shadow-inner">
                       <div
-                        className={`h-4 rounded-full transition-all duration-1500 ease-out ${getScoreBarColor(score)} shadow-lg relative overflow-hidden`}
+                        className={`h-4 rounded-full transition-all duration-1500 ease-out ${getScoreBarColor(score)} shadow-glow-primary relative overflow-hidden`}
                         style={{ width: getScoreWidth(score) }}
                       >
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer-slow"></div>
-                        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/10 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 via-secondary-300/15 to-transparent animate-shimmer bg-300%"></div>
+                        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-primary-600/10 via-secondary-600/5 to-transparent"></div>
                       </div>
                     </div>
                     {score >= 0.8 && (
