@@ -371,7 +371,7 @@ export function usePinchZoom(minZoom = 0.5, maxZoom = 3) {
   const [initialDistance, setInitialDistance] = useState(0);
   const [initialScale, setInitialScale] = useState(1);
 
-  const getDistance = (touches: TouchList) => {
+  const getDistance = (touches: React.TouchList) => {
     const touch1 = touches[0];
     const touch2 = touches[1];
     return Math.sqrt(
@@ -506,10 +506,19 @@ export function TouchQuizOption({
     >
       <motion.div
         onClick={onSelect}
-        onTouchStart={() => setIsPressed(true)}
-        onTouchEnd={() => setIsPressed(false)}
-        onTouchCancel={() => setIsPressed(false)}
         {...longPressHandlers}
+        onTouchStart={() => {
+          setIsPressed(true);
+          longPressHandlers.onTouchStart?.();
+        }}
+        onTouchEnd={() => {
+          setIsPressed(false);
+          longPressHandlers.onTouchEnd?.();
+        }}
+        onTouchCancel={() => {
+          setIsPressed(false);
+          longPressHandlers.onTouchCancel?.();
+        }}
         animate={{
           scale: isPressed ? 0.98 : 1,
           backgroundColor: isLongPressed ? 'rgba(155, 127, 255, 0.1)' : undefined,

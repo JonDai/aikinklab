@@ -193,8 +193,6 @@ const config: Config = {
         'glass-intense': '0 24px 48px 0 rgba(0, 0, 0, 0.55)',
         // Legacy
         'glow': '0 0 20px 5px rgba(155, 127, 255, 0.6)',
-        // Missing shadow definitions
-        'glow-aurora': '0 0 40px 12px rgba(155, 127, 255, 0.3), 0 0 80px 25px rgba(0, 212, 255, 0.2)',
       },
       transitionDuration: {
         '75': '75ms',

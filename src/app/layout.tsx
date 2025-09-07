@@ -1,7 +1,20 @@
 import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
-import { MobilePageWrapper } from '@/components/mobile/BottomNavigation';
+import { Navigation } from '@/components/layout/Navigation';
+
+// Temporary simple wrapper to fix critical navigation issues
+function MobilePageWrapper({ children, showBottomNav }: { children: React.ReactNode; showBottomNav?: boolean }) {
+  return (
+    <div className="min-h-screen relative">
+      <Navigation />
+      <div className={`${showBottomNav ? 'pb-20 md:pb-4' : ''}`}>
+        {children}
+      </div>
+      {/* Bottom nav will be re-enabled after framer-motion issue is resolved */}
+    </div>
+  );
+}
 
 const inter = Inter({ 
   subsets: ['latin'], 
@@ -13,14 +26,20 @@ const playfair = Playfair_Display({
   variable: '--font-playfair',
 });
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: '#9b7fff', // Aurora primary color
+  colorScheme: 'dark',
+};
+
 export const metadata: Metadata = {
   title: 'AIKinkLab - Discover Your Intimate Universe',
   description: 'AI-powered kink personality test with Aurora-themed modern design. Discover your intimate personality through our scientifically-validated assessment.',
   keywords: 'kink personality test, intimate psychology, BDSM assessment, sexual psychology, relationship compatibility',
   authors: [{ name: 'AIKinkLab Team' }],
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes',
-  themeColor: '#9b7fff', // Aurora primary color
-  colorScheme: 'dark',
   openGraph: {
     title: 'AIKinkLab - Discover Your Intimate Universe',
     description: 'AI-powered kink personality test with modern Aurora design',

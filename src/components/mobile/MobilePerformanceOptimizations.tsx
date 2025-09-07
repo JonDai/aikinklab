@@ -117,6 +117,7 @@ export const OptimizedImage = memo(function OptimizedImage({
   // Generate low-quality placeholder if not provided
   const defaultBlurDataURL = useMemo(() => {
     if (blurDataURL) return blurDataURL;
+    if (typeof window === 'undefined') return '';
     
     // Create a simple low-quality base64 placeholder
     const canvas = document.createElement('canvas');
@@ -354,7 +355,7 @@ export function OptimizedList<T extends Record<string, any>>({
         />
       ) : (
         <div className="text-center py-8 text-surface-400">
-          <p>No items found matching "{debouncedSearchTerm}"</p>
+          <p>No items found matching &quot;{debouncedSearchTerm}&quot;</p>
         </div>
       )}
     </div>
@@ -369,7 +370,11 @@ export function useImagePreloader(imageSrcs: string[]) {
   useEffect(() => {
     const preloadImage = (src: string): Promise<void> => {
       return new Promise((resolve, reject) => {
-        const img = new Image();
+        if (typeof window === 'undefined') {
+          resolve();
+          return;
+        }
+        const img = new window.Image();
         img.onload = () => {
           setLoadedImages(prev => new Set(prev).add(src));
           resolve();

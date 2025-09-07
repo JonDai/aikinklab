@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 interface NavItem {
   name: string;
   href: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: React.ComponentType<any>;
   badge?: number;
 }
 

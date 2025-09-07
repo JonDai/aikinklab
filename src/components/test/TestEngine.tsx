@@ -36,6 +36,8 @@ export function TestEngine({ onComplete, showPreview = false }: TestEngineProps)
   const [isLoading, setIsLoading] = useState(false);
   const [questionStartTime, setQuestionStartTime] = useState<Date>(new Date());
   const [showResults, setShowResults] = useState(false);
+  const [analysisStage, setAnalysisStage] = useState<'processing' | 'analyzing' | 'generating' | 'complete'>('processing');
+  const [analysisProgress, setAnalysisProgress] = useState(0);
 
   // Initialize test session
   useEffect(() => {
@@ -85,6 +87,52 @@ export function TestEngine({ onComplete, showPreview = false }: TestEngineProps)
     const interval = setInterval(saveProgress, 30000);
     return () => clearInterval(interval);
   }, [saveProgress]);
+
+  // Analysis progress effect
+  useEffect(() => {
+    if (!showResults && !session?.completed) return;
+    
+    const stages = ['processing', 'analyzing', 'generating', 'complete'] as const;
+    let currentStageIndex = 0;
+    let progress = 0;
+    
+    const interval = setInterval(() => {
+      progress += Math.random() * 15 + 5; // Random progress increment
+      setAnalysisProgress(Math.min(progress, 100));
+      
+      if (progress >= 25 && currentStageIndex === 0) {
+        setAnalysisStage('analyzing');
+        currentStageIndex = 1;
+      } else if (progress >= 60 && currentStageIndex === 1) {
+        setAnalysisStage('generating');
+        currentStageIndex = 2;
+      } else if (progress >= 90 && currentStageIndex === 2) {
+        setAnalysisStage('complete');
+        currentStageIndex = 3;
+      }
+      
+      if (progress >= 100) {
+        clearInterval(interval);
+        // Navigate to results after a brief delay
+        setTimeout(() => {
+          if (session) {
+            const resultId = generateSessionId();
+            localStorage.setItem(`result_${resultId}`, JSON.stringify({
+              results: calculateKinkPersonality(session.responses.reduce((acc, response) => {
+                acc[response.questionId] = response.answer;
+                return acc;
+              }, {} as Record<string, any>)),
+              session,
+              timestamp: new Date()
+            }));
+            router.push(`/results/${resultId}`);
+          }
+        }, 1500);
+      }
+    }, 300);
+    
+    return () => clearInterval(interval);
+  }, [showResults, session, router]);
 
   const handleAnswerSelect = (answer: string | number) => {
     setSelectedAnswer(answer);
@@ -180,52 +228,8 @@ export function TestEngine({ onComplete, showPreview = false }: TestEngineProps)
   const progress = ((currentQuestionIndex + 1) / kinkTestQuestions.length) * 100;
   const isLastQuestion = currentQuestionIndex >= kinkTestQuestions.length - 1;
 
+
   if (showResults || session.completed) {
-    // Simulate different analysis stages
-    const [analysisStage, setAnalysisStage] = useState<'processing' | 'analyzing' | 'generating' | 'complete'>('processing');
-    const [analysisProgress, setAnalysisProgress] = useState(0);
-    
-    useEffect(() => {
-      const stages = ['processing', 'analyzing', 'generating', 'complete'] as const;
-      let currentStageIndex = 0;
-      let progress = 0;
-      
-      const interval = setInterval(() => {
-        progress += Math.random() * 15 + 5; // Random progress increment
-        setAnalysisProgress(Math.min(progress, 100));
-        
-        if (progress >= 25 && currentStageIndex === 0) {
-          setAnalysisStage('analyzing');
-          currentStageIndex = 1;
-        } else if (progress >= 60 && currentStageIndex === 1) {
-          setAnalysisStage('generating');
-          currentStageIndex = 2;
-        } else if (progress >= 90 && currentStageIndex === 2) {
-          setAnalysisStage('complete');
-          currentStageIndex = 3;
-        }
-        
-        if (progress >= 100) {
-          clearInterval(interval);
-          // Navigate to results after a brief delay
-          setTimeout(() => {
-            const resultId = generateSessionId();
-            localStorage.setItem(`result_${resultId}`, JSON.stringify({
-              results: calculateKinkPersonality(session.responses.reduce((acc, response) => {
-                acc[response.questionId] = response.answer;
-                return acc;
-              }, {} as Record<string, any>)),
-              session,
-              timestamp: new Date()
-            }));
-            router.push(`/results/${resultId}`);
-          }, 1500);
-        }
-      }, 300);
-      
-      return () => clearInterval(interval);
-    }, [session, router]);
-    
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900 px-4">
         <AnalysisLoading stage={analysisStage} progress={analysisProgress} />

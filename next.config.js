@@ -156,29 +156,54 @@ const nextConfig = {
         sideEffects: false,
         // Advanced code splitting
         splitChunks: {
-          ...config.optimization.splitChunks,
+          chunks: 'all',
           cacheGroups: {
-            ...config.optimization.splitChunks?.cacheGroups,
-            // Separate vendor chunks for better caching
-            vendor: {
+            // Framework chunks (React, Next.js core)
+            framework: {
+              test: /[\\/]node_modules[\\/](react|react-dom|next)[\\/]/,
+              name: 'framework',
+              chunks: 'all',
+              priority: 40,
+              enforce: true,
+            },
+            // Animation libraries chunk
+            animations: {
+              test: /[\\/]node_modules[\\/](framer-motion|lottie-react|@lottiefiles)[\\/]/,
+              name: 'animations',
+              chunks: 'all',
+              priority: 35,
+              enforce: true,
+            },
+            // UI libraries chunk
+            ui: {
+              test: /[\\/]node_modules[\\/](lucide-react|@tanstack|zustand|class-variance-authority|clsx|tailwind-merge)[\\/]/,
+              name: 'ui',
+              chunks: 'all',
+              priority: 30,
+              enforce: true,
+            },
+            // Large vendor chunks
+            vendors: {
               test: /[\\/]node_modules[\\/]/,
               name: 'vendors',
               chunks: 'all',
               priority: 10,
+              minSize: 20000,
+              maxSize: 200000,
             },
-            // React specific chunk
-            react: {
-              test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-              name: 'react',
-              chunks: 'all',
-              priority: 20,
-            },
-            // Common chunks
+            // Common app chunks
             common: {
               name: 'common',
               minChunks: 2,
               chunks: 'all',
               priority: 5,
+              reuseExistingChunk: true,
+              minSize: 10000,
+            },
+            // Default chunk
+            default: {
+              minChunks: 2,
+              priority: -10,
               reuseExistingChunk: true,
             },
           },
@@ -200,7 +225,16 @@ const nextConfig = {
       ...config.resolve.alias,
       // Optimize lodash imports
       'lodash': 'lodash-es',
+      // Keep default framer-motion import (dist path not exported)
+      // 'framer-motion': 'framer-motion',
     };
+
+    // Tree shaking optimizations
+    config.module.rules.push({
+      test: /\.js$/,
+      include: /node_modules/,
+      sideEffects: false,
+    });
 
     // Add performance hints
     config.performance = {
