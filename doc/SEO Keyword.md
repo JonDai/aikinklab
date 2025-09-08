@@ -18,7 +18,7 @@
 
 * **文章1：**
     * **标题:** `Am I Dominant or Submissive? A Guide to Discovering Your Core Role`
-    * **主目标关键词:** `am i dominant or submissive test`  
+    * **主目标关键词:** `am i dominant or submissive test`   
     * **内容简报:** 深入探讨Dominant和Submissive的基本定义、心理特质、常见误区，并解释这是一个流动的光谱。最后，引导用户使用我们的AI测试来进行个性化分析。
     * **战略价值:** 捕获一个搜索量巨大的核心问题，建立信任，并直接导向我们的核心产品。
 
